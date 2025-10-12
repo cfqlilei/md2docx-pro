@@ -17,11 +17,17 @@
 #include <QTextEdit>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QWidget>
 
 BatchConverter::BatchConverter(HttpApi *httpApi, QWidget *parent)
-    : QWidget(parent), m_httpApi(httpApi), m_fileListWidget(nullptr),
-      m_outputDirEdit(nullptr), m_templateFileEdit(nullptr),
-      m_statusEdit(nullptr), m_convertButton(nullptr), m_clearButton(nullptr) {
+    : QWidget(parent), m_mainSplitter(nullptr), m_inputGroup(nullptr),
+      m_fileList(nullptr), m_addFilesButton(nullptr),
+      m_removeFilesButton(nullptr), m_clearFilesButton(nullptr),
+      m_fileCountLabel(nullptr), m_outputGroup(nullptr),
+      m_outputDirEdit(nullptr), m_selectOutputButton(nullptr),
+      m_actionGroup(nullptr), m_convertButton(nullptr), m_resetButton(nullptr),
+      m_statusGroup(nullptr), m_statusText(nullptr), m_progressBar(nullptr),
+      m_httpApi(httpApi), m_conversionInProgress(false) {
   setupUI();
   setupConnections();
 }
@@ -38,16 +44,16 @@ void BatchConverter::setupUI() {
   QLabel *fileListLabel = new QLabel("Markdown文件列表:", this);
   inputLayout->addWidget(fileListLabel);
 
-  m_fileListWidget = new QListWidget(this);
-  m_fileListWidget->setMaximumHeight(150);
-  m_fileListWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-  inputLayout->addWidget(m_fileListWidget);
+  m_fileList = new QListWidget(this);
+  m_fileList->setMaximumHeight(150);
+  m_fileList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+  inputLayout->addWidget(m_fileList);
 
   QHBoxLayout *fileButtonLayout = new QHBoxLayout();
 
   QPushButton *addFilesButton = new QPushButton("添加文件...", this);
   connect(addFilesButton, &QPushButton::clicked, this,
-          &BatchConverter::addFiles);
+          &BatchConverter::selectInputFiles);
   fileButtonLayout->addWidget(addFilesButton);
 
   QPushButton *removeFilesButton = new QPushButton("移除选中", this);
@@ -57,7 +63,7 @@ void BatchConverter::setupUI() {
 
   QPushButton *clearFilesButton = new QPushButton("清空列表", this);
   connect(clearFilesButton, &QPushButton::clicked, this,
-          &BatchConverter::clearFileList);
+          &BatchConverter::clearAllFiles);
   fileButtonLayout->addWidget(clearFilesButton);
 
   fileButtonLayout->addStretch();
@@ -76,18 +82,8 @@ void BatchConverter::setupUI() {
 
   QPushButton *browseOutputButton = new QPushButton("浏览...", this);
   connect(browseOutputButton, &QPushButton::clicked, this,
-          &BatchConverter::browseOutputDir);
+          &BatchConverter::selectOutputDir);
   outputLayout->addWidget(browseOutputButton, 0, 2);
-
-  outputLayout->addWidget(new QLabel("参考模板:"), 1, 0);
-  m_templateFileEdit = new QLineEdit(this);
-  m_templateFileEdit->setPlaceholderText("可选：选择DOCX模板文件");
-  outputLayout->addWidget(m_templateFileEdit, 1, 1);
-
-  QPushButton *browseTemplateButton = new QPushButton("浏览...", this);
-  connect(browseTemplateButton, &QPushButton::clicked, this,
-          &BatchConverter::browseTemplateFile);
-  outputLayout->addWidget(browseTemplateButton, 1, 2);
 
   mainLayout->addWidget(outputGroup);
 
@@ -97,28 +93,28 @@ void BatchConverter::setupUI() {
   m_convertButton = new QPushButton("开始批量转换", this);
   m_convertButton->setEnabled(false);
   connect(m_convertButton, &QPushButton::clicked, this,
-          &BatchConverter::startConversion);
+          &BatchConverter::startBatchConversion);
   buttonLayout->addWidget(m_convertButton);
 
-  m_clearButton = new QPushButton("清空所有", this);
-  connect(m_clearButton, &QPushButton::clicked, this,
-          &BatchConverter::clearAll);
-  buttonLayout->addWidget(m_clearButton);
+  m_resetButton = new QPushButton("重置", this);
+  connect(m_resetButton, &QPushButton::clicked, this,
+          &BatchConverter::resetForm);
+  buttonLayout->addWidget(m_resetButton);
 
   buttonLayout->addStretch();
   mainLayout->addLayout(buttonLayout);
 
   // 状态显示区域
-  QGroupBox *statusGroup = new QGroupBox("转换状态", this);
-  QVBoxLayout *statusLayout = new QVBoxLayout(statusGroup);
+  m_statusGroup = new QGroupBox("转换状态", this);
+  QVBoxLayout *statusLayout = new QVBoxLayout(m_statusGroup);
 
-  m_statusEdit = new QTextEdit(this);
-  m_statusEdit->setReadOnly(true);
-  m_statusEdit->setMaximumHeight(150);
-  m_statusEdit->setPlaceholderText("批量转换状态和结果将在这里显示...");
-  statusLayout->addWidget(m_statusEdit);
+  m_statusText = new QTextEdit(this);
+  m_statusText->setReadOnly(true);
+  m_statusText->setMaximumHeight(150);
+  m_statusText->setPlaceholderText("批量转换状态和结果将在这里显示...");
+  statusLayout->addWidget(m_statusText);
 
-  mainLayout->addWidget(statusGroup);
+  mainLayout->addWidget(m_statusGroup);
 
   // 添加弹性空间
   mainLayout->addStretch();
@@ -148,9 +144,8 @@ void BatchConverter::addFiles() {
   for (const QString &fileName : fileNames) {
     // 检查是否已经存在
     bool exists = false;
-    for (int i = 0; i < m_fileListWidget->count(); ++i) {
-      if (m_fileListWidget->item(i)->data(Qt::UserRole).toString() ==
-          fileName) {
+    for (int i = 0; i < m_fileList->count(); ++i) {
+      if (m_fileList->item(i)->data(Qt::UserRole).toString() == fileName) {
         exists = true;
         break;
       }
@@ -161,7 +156,7 @@ void BatchConverter::addFiles() {
           new QListWidgetItem(QFileInfo(fileName).fileName());
       item->setData(Qt::UserRole, fileName);
       item->setToolTip(fileName);
-      m_fileListWidget->addItem(item);
+      m_fileList->addItem(item);
     }
   }
 
@@ -169,50 +164,40 @@ void BatchConverter::addFiles() {
 }
 
 void BatchConverter::removeSelectedFiles() {
-  QList<QListWidgetItem *> selectedItems = m_fileListWidget->selectedItems();
+  QList<QListWidgetItem *> selectedItems = m_fileList->selectedItems();
   for (QListWidgetItem *item : selectedItems) {
-    delete m_fileListWidget->takeItem(m_fileListWidget->row(item));
+    delete m_fileList->takeItem(m_fileList->row(item));
   }
 
-  updateConvertButton();
+  updateUI();
 }
 
-void BatchConverter::clearFileList() {
-  m_fileListWidget->clear();
-  updateConvertButton();
+void BatchConverter::clearAllFiles() {
+  m_fileList->clear();
+  updateUI();
 }
 
-void BatchConverter::browseOutputDir() {
+void BatchConverter::selectOutputDir() {
   QString dirName = QFileDialog::getExistingDirectory(
       this, "选择输出目录",
       QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 
   if (!dirName.isEmpty()) {
     m_outputDirEdit->setText(dirName);
+    m_lastOutputDir = dirName;
   }
 }
 
-void BatchConverter::browseTemplateFile() {
-  QString fileName = QFileDialog::getOpenFileName(
-      this, "选择DOCX模板文件",
-      QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
-      "Word文档 (*.docx);;所有文件 (*)");
-
-  if (!fileName.isEmpty()) {
-    m_templateFileEdit->setText(fileName);
-  }
-}
-
-void BatchConverter::startConversion() {
-  if (m_fileListWidget->count() == 0) {
+void BatchConverter::startBatchConversion() {
+  if (m_fileList->count() == 0) {
     QMessageBox::warning(this, "错误", "请添加要转换的文件");
     return;
   }
 
   // 收集所有文件路径
   QStringList inputFiles;
-  for (int i = 0; i < m_fileListWidget->count(); ++i) {
-    QString filePath = m_fileListWidget->item(i)->data(Qt::UserRole).toString();
+  for (int i = 0; i < m_fileList->count(); ++i) {
+    QString filePath = m_fileList->item(i)->data(Qt::UserRole).toString();
 
     // 检查文件是否存在
     if (!QFile::exists(filePath)) {
@@ -262,18 +247,18 @@ void BatchConverter::startConversion() {
   m_httpApi->convertBatch(request);
 }
 
-void BatchConverter::clearAll() {
-  m_fileListWidget->clear();
+void BatchConverter::resetForm() {
+  m_fileList->clear();
   m_outputDirEdit->clear();
-  m_templateFileEdit->clear();
-  m_statusEdit->clear();
+  m_statusText->clear();
+  m_inputFiles.clear();
 
-  updateConvertButton();
+  updateUI();
 }
 
-void BatchConverter::updateConvertButton() {
-  bool hasFiles = m_fileListWidget->count() > 0;
-  m_convertButton->setEnabled(hasFiles && isEnabled());
+void BatchConverter::updateUI() {
+  bool hasFiles = m_fileList->count() > 0;
+  m_convertButton->setEnabled(hasFiles && !m_conversionInProgress);
 }
 
 void BatchConverter::onConversionFinished(bool success,

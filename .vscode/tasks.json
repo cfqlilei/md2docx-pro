@@ -5,7 +5,10 @@
             "label": "go-mod-tidy",
             "type": "shell",
             "command": "go",
-            "args": ["mod", "tidy"],
+            "args": [
+                "mod",
+                "tidy"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -21,7 +24,9 @@
             "command": "go",
             "args": [
                 "build",
-                "-o", "build/md2docx-server-macos",
+                "-buildvcs=false",
+                "-o",
+                "build/md2docx-server-macos",
                 "./cmd/server"
             ],
             "group": "build",
@@ -31,7 +36,9 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": ["$go"],
+            "problemMatcher": [
+                "$go"
+            ],
             "dependsOn": "go-mod-tidy",
             "options": {
                 "env": {
@@ -47,7 +54,9 @@
             "command": "go",
             "args": [
                 "build",
-                "-o", "build/md2docx-server-windows.exe",
+                "-buildvcs=false",
+                "-o",
+                "build/md2docx-server-windows.exe",
                 "./cmd/server"
             ],
             "group": "build",
@@ -57,7 +66,9 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": ["$go"],
+            "problemMatcher": [
+                "$go"
+            ],
             "dependsOn": "go-mod-tidy",
             "options": {
                 "env": {
@@ -71,7 +82,10 @@
             "label": "build-qt-complete-macos",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake ../complete_test.pro && make"],
+            "args": [
+                "-c",
+                "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake ../complete_test.pro && make"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -79,13 +93,18 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": ["$gcc"]
+            "problemMatcher": [
+                "$gcc"
+            ]
         },
         {
             "label": "build-qt-complete-windows",
             "type": "shell",
             "command": "cmd",
-            "args": ["/c", "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake ..\\complete_test.pro & nmake"],
+            "args": [
+                "/c",
+                "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake ..\\complete_test.pro & nmake"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -93,7 +112,9 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": ["$msCompile"],
+            "problemMatcher": [
+                "$msCompile"
+            ],
             "options": {
                 "env": {
                     "PATH": "C:\\Qt\\5.15.2\\msvc2019_64\\bin;${env:PATH}"
@@ -104,7 +125,10 @@
             "label": "build-qt-complete-debug-macos",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake CONFIG+=debug ../complete_test.pro && make"],
+            "args": [
+                "-c",
+                "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake CONFIG+=debug ../complete_test.pro && make"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -112,13 +136,18 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": ["$gcc"]
+            "problemMatcher": [
+                "$gcc"
+            ]
         },
         {
             "label": "build-qt-complete-debug-windows",
             "type": "shell",
             "command": "cmd",
-            "args": ["/c", "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake CONFIG+=debug ..\\complete_test.pro & nmake"],
+            "args": [
+                "/c",
+                "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake CONFIG+=debug ..\\complete_test.pro & nmake"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -126,7 +155,9 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": ["$msCompile"],
+            "problemMatcher": [
+                "$msCompile"
+            ],
             "options": {
                 "env": {
                     "PATH": "C:\\Qt\\5.15.2\\msvc2019_64\\bin;${env:PATH}"
@@ -197,7 +228,9 @@
             "label": "test-api-features",
             "type": "shell",
             "command": "bash",
-            "args": ["./test_api_features.sh"],
+            "args": [
+                "./test_api_features.sh"
+            ],
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -211,7 +244,10 @@
             "label": "clean-build",
             "type": "shell",
             "command": "bash",
-            "args": ["-c", "rm -rf build qt-frontend/build_* tests/*/results tests/*/*.docx"],
+            "args": [
+                "-c",
+                "rm -rf build qt-frontend/build_* tests/*/results tests/*/*.docx"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -225,7 +261,9 @@
             "label": "package-macos",
             "type": "shell",
             "command": "bash",
-            "args": ["./scripts/package_macos.sh"],
+            "args": [
+                "./scripts/package_macos.sh"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,
@@ -240,7 +278,10 @@
             "label": "package-windows",
             "type": "shell",
             "command": "cmd",
-            "args": ["/c", "scripts\\package_windows.bat"],
+            "args": [
+                "/c",
+                "scripts\\package_windows.bat"
+            ],
             "group": "build",
             "presentation": {
                 "echo": true,

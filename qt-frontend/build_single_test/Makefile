@@ -841,16 +841,18 @@ main_single_test.moc: ../src/main_single_test.cpp \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
@@ -891,16 +893,18 @@ main_single_test.o: ../src/main_single_test.cpp /opt/homebrew/Cellar/qt@5/5.15.1
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qboxlayout.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
