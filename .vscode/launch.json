@@ -1,0 +1,203 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "启动Go后端服务 (macOS)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/server/main.go",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CGO_ENABLED": "1",
+                "GOOS": "darwin",
+                "GOARCH": "arm64"
+            },
+            "args": [],
+            "showLog": true,
+            "console": "integratedTerminal",
+            "preLaunchTask": "go-mod-tidy"
+        },
+        {
+            "name": "启动Go后端服务 (Windows)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/server/main.go",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CGO_ENABLED": "1",
+                "GOOS": "windows",
+                "GOARCH": "amd64"
+            },
+            "args": [],
+            "showLog": true,
+            "console": "integratedTerminal",
+            "preLaunchTask": "go-mod-tidy"
+        },
+        {
+            "name": "调试Go后端服务 (macOS)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/server/main.go",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CGO_ENABLED": "1",
+                "GOOS": "darwin",
+                "GOARCH": "arm64"
+            },
+            "args": [],
+            "showLog": true,
+            "console": "integratedTerminal",
+            "preLaunchTask": "go-mod-tidy",
+            "stopOnEntry": false,
+            "dlvFlags": ["--check-go-version=false"]
+        },
+        {
+            "name": "调试Go后端服务 (Windows)",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/server/main.go",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "CGO_ENABLED": "1",
+                "GOOS": "windows",
+                "GOARCH": "amd64"
+            },
+            "args": [],
+            "showLog": true,
+            "console": "integratedTerminal",
+            "preLaunchTask": "go-mod-tidy",
+            "stopOnEntry": false,
+            "dlvFlags": ["--check-go-version=false"]
+        },
+        {
+            "name": "启动Qt前端 (macOS)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.app/Contents/MacOS/complete_test",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "environment": [
+                {
+                    "name": "PATH",
+                    "value": "/opt/homebrew/opt/qt@5/bin:${env:PATH}"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "build-qt-complete-macos"
+        },
+        {
+            "name": "启动Qt前端 (Windows)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "environment": [
+                {
+                    "name": "PATH",
+                    "value": "C:\\Qt\\5.15.2\\msvc2019_64\\bin;${env:PATH}"
+                }
+            ],
+            "console": "externalTerminal",
+            "preLaunchTask": "build-qt-complete-windows"
+        },
+        {
+            "name": "调试Qt前端 (macOS)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.app/Contents/MacOS/complete_test",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "environment": [
+                {
+                    "name": "PATH",
+                    "value": "/opt/homebrew/opt/qt@5/bin:${env:PATH}"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "build-qt-complete-debug-macos"
+        },
+        {
+            "name": "调试Qt前端 (Windows)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "environment": [
+                {
+                    "name": "PATH",
+                    "value": "C:\\Qt\\5.15.2\\msvc2019_64\\bin;${env:PATH}"
+                }
+            ],
+            "console": "externalTerminal",
+            "preLaunchTask": "build-qt-complete-debug-windows"
+        },
+        {
+            "name": "启动完整应用 (macOS)",
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Complete App",
+            "program": "${workspaceFolder}/scripts/launch_complete_app_macos.js",
+            "console": "integratedTerminal",
+            "preLaunchTask": "build-complete-app-macos"
+        },
+        {
+            "name": "启动完整应用 (Windows)",
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Complete App",
+            "program": "${workspaceFolder}/scripts/launch_complete_app_windows.js",
+            "console": "integratedTerminal",
+            "preLaunchTask": "build-complete-app-windows"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "启动前后端 (macOS)",
+            "configurations": [
+                "启动Go后端服务 (macOS)",
+                "启动Qt前端 (macOS)"
+            ],
+            "stopAll": true,
+            "preLaunchTask": "build-complete-app-macos"
+        },
+        {
+            "name": "启动前后端 (Windows)",
+            "configurations": [
+                "启动Go后端服务 (Windows)",
+                "启动Qt前端 (Windows)"
+            ],
+            "stopAll": true,
+            "preLaunchTask": "build-complete-app-windows"
+        },
+        {
+            "name": "调试前后端 (macOS)",
+            "configurations": [
+                "调试Go后端服务 (macOS)",
+                "调试Qt前端 (macOS)"
+            ],
+            "stopAll": true,
+            "preLaunchTask": "build-complete-app-debug-macos"
+        },
+        {
+            "name": "调试前后端 (Windows)",
+            "configurations": [
+                "调试Go后端服务 (Windows)",
+                "调试Qt前端 (Windows)"
+            ],
+            "stopAll": true,
+            "preLaunchTask": "build-complete-app-debug-windows"
+        }
+    ]
+}

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown转Word工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 16px;
+            color: #666;
+        }
+        .tab.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], input[type="file"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Markdown转Word工具</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('single')">单文件转换</button>
+            <button class="tab" onclick="showTab('batch')">批量转换</button>
+            <button class="tab" onclick="showTab('config')">设置</button>
+        </div>
+
+        <!-- 单文件转换 -->
+        <div id="single" class="tab-content active">
+            <div class="form-group">
+                <label for="singleInputFile">选择Markdown文件:</label>
+                <input type="file" id="singleInputFile" accept=".md,.markdown">
+            </div>
+            <div class="form-group">
+                <label for="singleOutputDir">输出目录 (可选):</label>
+                <input type="text" id="singleOutputDir" placeholder="留空则使用原文件目录">
+            </div>
+            <div class="form-group">
+                <label for="singleOutputName">输出文件名 (可选):</label>
+                <input type="text" id="singleOutputName" placeholder="留空则使用原文件名">
+            </div>
+            <button onclick="convertSingle()">开始转换</button>
+            <div id="singleStatus" class="status" style="display: none;"></div>
+        </div>
+
+        <!-- 批量转换 -->
+        <div id="batch" class="tab-content">
+            <div class="form-group">
+                <label for="batchInputFiles">选择多个Markdown文件:</label>
+                <input type="file" id="batchInputFiles" accept=".md,.markdown" multiple>
+            </div>
+            <div class="form-group">
+                <label for="batchOutputDir">统一输出目录 (可选):</label>
+                <input type="text" id="batchOutputDir" placeholder="留空则使用各文件原目录">
+            </div>
+            <button onclick="convertBatch()">开始批量转换</button>
+            <div id="batchStatus" class="status" style="display: none;"></div>
+        </div>
+
+        <!-- 设置 -->
+        <div id="config" class="tab-content">
+            <div class="form-group">
+                <label for="pandocPath">Pandoc路径:</label>
+                <input type="text" id="pandocPath" placeholder="Pandoc可执行文件路径">
+            </div>
+            <div class="form-group">
+                <label for="templateFile">参考模板文件 (可选):</label>
+                <input type="text" id="templateFile" placeholder="DOCX模板文件路径">
+            </div>
+            <button onclick="loadConfig()">加载当前配置</button>
+            <button onclick="saveConfig()">保存配置</button>
+            <button onclick="validateConfig()">验证配置</button>
+            <div id="configStatus" class="status" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

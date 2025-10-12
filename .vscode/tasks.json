@@ -1,0 +1,255 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "go-mod-tidy",
+            "type": "shell",
+            "command": "go",
+            "args": ["mod", "tidy"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "build-go-backend-macos",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-o", "build/md2docx-server-macos",
+                "./cmd/server"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$go"],
+            "dependsOn": "go-mod-tidy",
+            "options": {
+                "env": {
+                    "CGO_ENABLED": "1",
+                    "GOOS": "darwin",
+                    "GOARCH": "arm64"
+                }
+            }
+        },
+        {
+            "label": "build-go-backend-windows",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-o", "build/md2docx-server-windows.exe",
+                "./cmd/server"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$go"],
+            "dependsOn": "go-mod-tidy",
+            "options": {
+                "env": {
+                    "CGO_ENABLED": "1",
+                    "GOOS": "windows",
+                    "GOARCH": "amd64"
+                }
+            }
+        },
+        {
+            "label": "build-qt-complete-macos",
+            "type": "shell",
+            "command": "bash",
+            "args": ["-c", "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake ../complete_test.pro && make"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "build-qt-complete-windows",
+            "type": "shell",
+            "command": "cmd",
+            "args": ["/c", "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake ..\\complete_test.pro & nmake"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$msCompile"],
+            "options": {
+                "env": {
+                    "PATH": "C:\\Qt\\5.15.2\\msvc2019_64\\bin;${env:PATH}"
+                }
+            }
+        },
+        {
+            "label": "build-qt-complete-debug-macos",
+            "type": "shell",
+            "command": "bash",
+            "args": ["-c", "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake CONFIG+=debug ../complete_test.pro && make"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "build-qt-complete-debug-windows",
+            "type": "shell",
+            "command": "cmd",
+            "args": ["/c", "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake CONFIG+=debug ..\\complete_test.pro & nmake"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": ["$msCompile"],
+            "options": {
+                "env": {
+                    "PATH": "C:\\Qt\\5.15.2\\msvc2019_64\\bin;${env:PATH}"
+                }
+            }
+        },
+        {
+            "label": "build-complete-app-macos",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build-go-backend-macos",
+                "build-qt-complete-macos"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "build-complete-app-windows",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build-go-backend-windows",
+                "build-qt-complete-windows"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "build-complete-app-debug-macos",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build-go-backend-macos",
+                "build-qt-complete-debug-macos"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "build-complete-app-debug-windows",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build-go-backend-windows",
+                "build-qt-complete-debug-windows"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "test-api-features",
+            "type": "shell",
+            "command": "bash",
+            "args": ["./test_api_features.sh"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "clean-build",
+            "type": "shell",
+            "command": "bash",
+            "args": ["-c", "rm -rf build qt-frontend/build_* tests/*/results tests/*/*.docx"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "package-macos",
+            "type": "shell",
+            "command": "bash",
+            "args": ["./scripts/package_macos.sh"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "dependsOn": "build-complete-app-macos",
+            "problemMatcher": []
+        },
+        {
+            "label": "package-windows",
+            "type": "shell",
+            "command": "cmd",
+            "args": ["/c", "scripts\\package_windows.bat"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "dependsOn": "build-complete-app-windows",
+            "problemMatcher": []
+        }
+    ]
+}
