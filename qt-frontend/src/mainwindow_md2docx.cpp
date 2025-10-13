@@ -1,4 +1,5 @@
 #include "mainwindow_md2docx.h"
+#include "aboutwidget.h"
 #include "httpapi.h"
 #include "multifileconverter.h"
 #include "settingswidget.h"
@@ -20,7 +21,7 @@
 MainWindowMd2Docx::MainWindowMd2Docx(QWidget *parent)
     : QMainWindow(parent), m_tabWidget(nullptr), m_singleFileConverter(nullptr),
       m_multiFileConverter(nullptr), m_settingsWidget(nullptr),
-      m_httpApi(nullptr), m_connectionTimer(nullptr) {
+      m_aboutWidget(nullptr), m_httpApi(nullptr), m_connectionTimer(nullptr) {
   setupUI();
   setupHttpApi();
   setupConnections();
@@ -116,6 +117,10 @@ void MainWindowMd2Docx::onHealthCheckFinished(bool success) {
       // 创建设置页签
       m_settingsWidget = new SettingsWidget(m_httpApi, this);
       m_tabWidget->addTab(m_settingsWidget, "设置");
+
+      // 创建关于页签
+      m_aboutWidget = new AboutWidget(this);
+      m_tabWidget->addTab(m_aboutWidget, "关于");
 
       // 连接转换信号
       connect(m_singleFileConverter, &SingleFileConverter::conversionStarted,

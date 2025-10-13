@@ -63,6 +63,7 @@ private:
   void updateUI();
   void showStatus(const QString &message, bool isError = false);
   void clearStatus();
+  QString detectPandocPath();
   bool validatePandocPath(const QString &path);
   bool validateTemplateFile(const QString &path);
 
@@ -80,7 +81,6 @@ private:
   QCheckBox *m_useTemplateCheckBox;
 
   QGroupBox *m_actionGroup;
-  QPushButton *m_loadButton;
   QPushButton *m_saveButton;
   QPushButton *m_validateButton;
   QPushButton *m_resetButton;

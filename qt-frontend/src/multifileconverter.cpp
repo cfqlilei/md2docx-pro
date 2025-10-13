@@ -1,6 +1,7 @@
 #include "multifileconverter.h"
 #include "httpapi.h"
 
+#include <QApplication>
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QDir>
@@ -186,7 +187,20 @@ void MultiFileConverter::startBatchConversion() {
   m_convertButton->setEnabled(false);
   m_convertButton->setText("转换中...");
 
+  // 清空之前的状态信息
+  clearStatus();
+
   showStatus(QString("开始批量转换 %1 个文件...").arg(m_inputFiles.size()));
+  showStatus(QString("输出目录: %1")
+                 .arg(m_outputDirEdit->text().isEmpty()
+                          ? "各文件所在目录"
+                          : m_outputDirEdit->text()));
+  showStatus("正在发送转换请求到后端服务...");
+
+  // 强制刷新UI
+  m_statusText->repaint();
+  QApplication::processEvents();
+
   emit conversionStarted();
 
   // 调用HTTP API进行批量转换

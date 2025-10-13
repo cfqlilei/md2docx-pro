@@ -4,6 +4,7 @@
 #include <QCheckBox>
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QGridLayout>
@@ -25,9 +26,9 @@ SettingsWidget::SettingsWidget(HttpApi *api, QWidget *parent)
       m_pandocStatusLabel(nullptr), m_templateGroup(nullptr),
       m_templateFileEdit(nullptr), m_selectTemplateButton(nullptr),
       m_clearTemplateButton(nullptr), m_useTemplateCheckBox(nullptr),
-      m_actionGroup(nullptr), m_loadButton(nullptr), m_saveButton(nullptr),
-      m_validateButton(nullptr), m_resetButton(nullptr), m_statusGroup(nullptr),
-      m_statusText(nullptr), m_httpApi(api), m_configLoaded(false) {
+      m_actionGroup(nullptr), m_saveButton(nullptr), m_validateButton(nullptr),
+      m_resetButton(nullptr), m_statusGroup(nullptr), m_statusText(nullptr),
+      m_httpApi(api), m_configLoaded(false) {
   setupUI();
   setupConnections();
   updateUI();
@@ -87,16 +88,13 @@ void SettingsWidget::setupUI() {
   m_actionGroup = new QGroupBox("操作", this);
   QHBoxLayout *actionLayout = new QHBoxLayout(m_actionGroup);
 
-  m_loadButton = new QPushButton("加载配置", this);
-  actionLayout->addWidget(m_loadButton);
-
   m_saveButton = new QPushButton("保存配置", this);
   actionLayout->addWidget(m_saveButton);
 
   m_validateButton = new QPushButton("验证配置", this);
   actionLayout->addWidget(m_validateButton);
 
-  m_resetButton = new QPushButton("重置默认", this);
+  m_resetButton = new QPushButton("重置为默认配置", this);
   actionLayout->addWidget(m_resetButton);
 
   actionLayout->addStretch();
@@ -128,8 +126,6 @@ void SettingsWidget::setupConnections() {
           &SettingsWidget::selectTemplateFile);
   connect(m_clearTemplateButton, &QPushButton::clicked, this,
           &SettingsWidget::clearTemplateFile);
-  connect(m_loadButton, &QPushButton::clicked, this,
-          &SettingsWidget::loadCurrentConfig);
   connect(m_saveButton, &QPushButton::clicked, this,
           &SettingsWidget::saveConfig);
   connect(m_validateButton, &QPushButton::clicked, this,
@@ -238,6 +234,15 @@ void SettingsWidget::loadCurrentConfig() {
 }
 
 void SettingsWidget::saveConfig() {
+  // 询问用户是否确认保存
+  QMessageBox::StandardButton reply = QMessageBox::question(
+      this, "确认保存", "确定要保存当前配置吗？",
+      QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+  if (reply != QMessageBox::Yes) {
+    return;
+  }
+
   showStatus("正在保存配置...");
   if (m_httpApi) {
     ConfigData config;
@@ -257,19 +262,50 @@ void SettingsWidget::validateConfig() {
 }
 
 void SettingsWidget::resetToDefaults() {
-  m_pandocPathEdit->clear();
+  // 询问用户是否确认重置
+  QMessageBox::StandardButton reply = QMessageBox::question(
+      this, "确认重置", "确定要重置为默认配置吗？\n这将清除当前所有设置。",
+      QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+  if (reply != QMessageBox::Yes) {
+    return;
+  }
+
+  showStatus("正在重置为默认配置...");
+
+  // 清空当前设置
   m_templateFileEdit->clear();
   m_useTemplateCheckBox->setChecked(false);
-  m_pandocStatusLabel->setText("未测试");
-  m_pandocStatusLabel->setStyleSheet("color: gray;");
 
-  showStatus("已重置为默认设置");
+  // 自动检测pandoc路径
+  QString pandocPath = detectPandocPath();
+  if (!pandocPath.isEmpty()) {
+    m_pandocPathEdit->setText(pandocPath);
+    m_pandocStatusLabel->setText("自动检测");
+    m_pandocStatusLabel->setStyleSheet("color: blue;");
+    showStatus(QString("已自动检测到Pandoc路径: %1").arg(pandocPath));
+
+    // 自动验证检测到的路径
+    testPandocPath();
+  } else {
+    m_pandocPathEdit->clear();
+    m_pandocStatusLabel->setText("未找到");
+    m_pandocStatusLabel->setStyleSheet("color: red;");
+    showStatus("未能自动检测到Pandoc路径，请手动设置");
+  }
+
   updateUI();
 }
 
 void SettingsWidget::onPandocPathChanged() {
   m_pandocStatusLabel->setText("未测试");
   m_pandocStatusLabel->setStyleSheet("color: gray;");
+
+  // 如果路径发生变化，提示用户保存配置
+  if (m_configLoaded && !m_pandocPathEdit->text().isEmpty()) {
+    showStatus("Pandoc路径已更改，请点击'保存配置'使更改生效", false);
+  }
+
   updateUI();
 }
 
@@ -351,6 +387,46 @@ void SettingsWidget::showStatus(const QString &message, bool isError) {
 }
 
 void SettingsWidget::clearStatus() { m_statusText->clear(); }
+
+QString SettingsWidget::detectPandocPath() {
+  // 常见的pandoc安装路径
+  QStringList possiblePaths = {
+      "/usr/local/bin/pandoc",        // Homebrew on macOS
+      "/opt/homebrew/bin/pandoc",     // Homebrew on Apple Silicon
+      "/usr/bin/pandoc",              // Linux系统包管理器
+      "/usr/local/pandoc/bin/pandoc", // 手动安装
+      "pandoc"                        // 系统PATH中
+  };
+
+  // 首先尝试通过which命令查找
+  QProcess process;
+  process.start("which", QStringList() << "pandoc");
+  process.waitForFinished(3000);
+
+  if (process.exitCode() == 0) {
+    QString path = process.readAllStandardOutput().trimmed();
+    if (!path.isEmpty() && QFile::exists(path)) {
+      return path;
+    }
+  }
+
+  // 如果which命令失败，尝试预定义路径
+  for (const QString &path : possiblePaths) {
+    if (path == "pandoc") {
+      // 测试pandoc是否在PATH中
+      QProcess testProcess;
+      testProcess.start("pandoc", QStringList() << "--version");
+      testProcess.waitForFinished(3000);
+      if (testProcess.exitCode() == 0) {
+        return "pandoc";
+      }
+    } else if (QFile::exists(path)) {
+      return path;
+    }
+  }
+
+  return QString(); // 未找到
+}
 
 bool SettingsWidget::validatePandocPath(const QString &path) {
   if (path.isEmpty()) {

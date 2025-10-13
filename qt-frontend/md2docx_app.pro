@@ -25,6 +25,7 @@ SOURCES += \
     src/singlefileconverter.cpp \
     src/multifileconverter.cpp \
     src/settingswidget.cpp \
+    src/aboutwidget.cpp \
     src/httpapi.cpp \
     src/appsettings.cpp
 
@@ -34,6 +35,7 @@ HEADERS += \
     src/singlefileconverter.h \
     src/multifileconverter.h \
     src/settingswidget.h \
+    src/aboutwidget.h \
     src/httpapi.h \
     src/appsettings.h
 
