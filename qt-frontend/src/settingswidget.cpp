@@ -371,7 +371,6 @@ void SettingsWidget::updateUI() {
   m_clearTemplateButton->setEnabled(isEnabled &&
                                     m_useTemplateCheckBox->isChecked() &&
                                     !m_templateFileEdit->text().isEmpty());
-  m_loadButton->setEnabled(isEnabled);
   m_saveButton->setEnabled(isEnabled);
   m_validateButton->setEnabled(isEnabled);
   m_resetButton->setEnabled(isEnabled);

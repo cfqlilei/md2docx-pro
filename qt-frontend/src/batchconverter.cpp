@@ -131,8 +131,8 @@ void BatchConverter::setupConnections() {
           });
 
   // 监听文件列表变化
-  connect(m_fileListWidget, &QListWidget::itemSelectionChanged, this,
-          &BatchConverter::updateConvertButton);
+  connect(m_fileList, &QListWidget::itemSelectionChanged, this,
+          &BatchConverter::updateUI);
 }
 
 void BatchConverter::addFiles() {
@@ -160,7 +160,7 @@ void BatchConverter::addFiles() {
     }
   }
 
-  updateConvertButton();
+  updateUI();
 }
 
 void BatchConverter::removeSelectedFiles() {
@@ -224,16 +224,16 @@ void BatchConverter::startBatchConversion() {
   m_convertButton->setText("批量转换中...");
 
   // 显示状态
-  m_statusEdit->append(
+  m_statusText->append(
       QString("开始批量转换 %1 个文件").arg(inputFiles.count()));
-  m_statusEdit->append(
+  m_statusText->append(
       QString("输出目录: %1")
           .arg(outputDir.isEmpty() ? "使用各文件所在目录" : outputDir));
   if (!templateFile.isEmpty()) {
-    m_statusEdit->append(
+    m_statusText->append(
         QString("使用模板: %1").arg(QFileInfo(templateFile).fileName()));
   }
-  m_statusEdit->append("正在转换...");
+  m_statusText->append("正在转换...");
 
   emit conversionStarted();
 
@@ -261,20 +261,28 @@ void BatchConverter::updateUI() {
   m_convertButton->setEnabled(hasFiles && !m_conversionInProgress);
 }
 
-void BatchConverter::onConversionFinished(bool success,
-                                          const QStringList &outputFiles,
-                                          const QString &message) {
+void BatchConverter::onConversionFinished(const ConversionResponse &response) {
+  bool success = response.success;
+  QString message = response.message;
+  QStringList outputFiles;
+
+  // 从response.results中提取输出文件列表
+  for (const auto &result : response.results) {
+    if (result.success && !result.outputFile.isEmpty()) {
+      outputFiles.append(result.outputFile);
+    }
+  }
   // 恢复转换按钮
   m_convertButton->setEnabled(true);
   m_convertButton->setText("开始批量转换");
 
   if (success) {
-    m_statusEdit->append("✅ 批量转换完成！");
-    m_statusEdit->append(
+    m_statusText->append("✅ 批量转换完成！");
+    m_statusText->append(
         QString("成功转换 %1 个文件").arg(outputFiles.count()));
 
     for (const QString &outputFile : outputFiles) {
-      m_statusEdit->append(
+      m_statusText->append(
           QString("  ✓ %1").arg(QFileInfo(outputFile).fileName()));
     }
 
@@ -293,8 +301,8 @@ void BatchConverter::onConversionFinished(bool success,
       }
     }
   } else {
-    m_statusEdit->append("❌ 批量转换失败！");
-    m_statusEdit->append(QString("错误信息: %1").arg(message));
+    m_statusText->append("❌ 批量转换失败！");
+    m_statusText->append(QString("错误信息: %1").arg(message));
   }
 
   emit conversionFinished(success, message);
@@ -302,5 +310,5 @@ void BatchConverter::onConversionFinished(bool success,
 
 void BatchConverter::setEnabled(bool enabled) {
   QWidget::setEnabled(enabled);
-  updateConvertButton();
+  updateUI();
 }

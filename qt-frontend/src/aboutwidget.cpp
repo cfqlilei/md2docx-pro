@@ -43,9 +43,9 @@ void AboutWidget::setupUI() {
   m_versionLabel->setStyleSheet("color: #0066CC;");
   appInfoLayout->addWidget(m_versionLabel);
 
-  m_descriptionLabel = new QLabel(
-      "一个功能强大的Markdown到Word文档转换工具\n"
-      "支持单文件转换、批量转换、图片嵌入等功能", this);
+  m_descriptionLabel = new QLabel("一个功能强大的Markdown到Word文档转换工具\n"
+                                  "支持单文件转换、批量转换、图片嵌入等功能",
+                                  this);
   m_descriptionLabel->setAlignment(Qt::AlignCenter);
   m_descriptionLabel->setWordWrap(true);
   appInfoLayout->addWidget(m_descriptionLabel);
@@ -97,12 +97,11 @@ void AboutWidget::setupUI() {
   m_techInfoText = new QTextEdit(this);
   m_techInfoText->setMaximumHeight(120);
   m_techInfoText->setReadOnly(true);
-  m_techInfoText->setText(
-      "• 前端：Qt 5.15.17 + C++17\n"
-      "• 后端：Go 1.25.0 + Gin框架\n"
-      "• 转换引擎：Pandoc 3.8.2\n"
-      "• 构建工具：qmake + Go modules\n"
-      "• 支持平台：macOS, Linux, Windows");
+  m_techInfoText->setText("• 前端：Qt 5.15.17 + C++17\n"
+                          "• 后端：Go 1.25.0 + Gin框架\n"
+                          "• 转换引擎：Pandoc 3.8.2\n"
+                          "• 构建工具：qmake + Go modules\n"
+                          "• 支持平台：macOS, Linux, Windows");
   techLayout->addWidget(m_techInfoText);
 
   mainLayout->addWidget(m_techGroup);
@@ -114,10 +113,8 @@ void AboutWidget::setupUI() {
   m_licenseText = new QTextEdit(this);
   m_licenseText->setMaximumHeight(80);
   m_licenseText->setReadOnly(true);
-  m_licenseText->setText(
-      "本项目采用MIT许可证开源\n"
-      "您可以自由使用、修改和分发本软件\n"
-      "详细许可证信息请查看项目中的LICENSE文件");
+  m_licenseText->setText("本项目采用Apache许可证 2.0 开源\n"
+                         "详细许可证信息请查看项目中的LICENSE文件");
   licenseLayout->addWidget(m_licenseText);
 
   mainLayout->addWidget(m_licenseGroup);
@@ -138,22 +135,26 @@ void AboutWidget::setupConnections() {
 void AboutWidget::openGitHubRepository() {
   QString url = "https://github.com/cfqlilei/pandoc-md2docx";
   if (!QDesktopServices::openUrl(QUrl(url))) {
-    QMessageBox::warning(this, "打开失败", 
-                        QString("无法打开浏览器访问：%1\n请手动复制链接到浏览器中打开").arg(url));
+    QMessageBox::warning(
+        this, "打开失败",
+        QString("无法打开浏览器访问：%1\n请手动复制链接到浏览器中打开")
+            .arg(url));
   }
 }
 
 void AboutWidget::openEmailContact() {
   QString emailUrl = "mailto:cfq@wesoftcn.com?subject=Markdown转Word工具反馈";
   if (!QDesktopServices::openUrl(QUrl(emailUrl))) {
-    QMessageBox::information(this, "邮件客户端", 
-                           "无法打开默认邮件客户端\n请手动发送邮件到：cfq@wesoftcn.com");
+    QMessageBox::information(
+        this, "邮件客户端",
+        "无法打开默认邮件客户端\n请手动发送邮件到：cfq@wesoftcn.com");
   }
 }
 
 void AboutWidget::copyContactInfo() {
   QString contactInfo = "微易软件 - cfq@wesoftcn.com";
   QApplication::clipboard()->setText(contactInfo);
-  QMessageBox::information(this, "复制成功", 
-                          QString("联系方式已复制到剪贴板：\n%1").arg(contactInfo));
+  QMessageBox::information(
+      this, "复制成功",
+      QString("联系方式已复制到剪贴板：\n%1").arg(contactInfo));
 }

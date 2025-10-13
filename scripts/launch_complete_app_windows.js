@@ -22,9 +22,9 @@ const CONFIG = {
     binary: path.join(
       PROJECT_ROOT,
       "qt-frontend",
-      "build_single_test",
+      "build_md2docx_app",
       "build",
-      "single_test.exe"
+      "md2docx_app.exe"
     ),
   },
 };

@@ -84,7 +84,7 @@
             "command": "bash",
             "args": [
                 "-c",
-                "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake ../complete_test.pro && make"
+                "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_md2docx_app && mkdir build_md2docx_app && cd build_md2docx_app && qmake ../md2docx_app.pro && make"
             ],
             "group": "build",
             "presentation": {
@@ -103,7 +103,7 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake ..\\complete_test.pro & nmake"
+                "cd qt-frontend && rmdir /s /q build_md2docx_app 2>nul & mkdir build_md2docx_app & cd build_md2docx_app & qmake ..\\md2docx_app.pro & nmake"
             ],
             "group": "build",
             "presentation": {
@@ -127,7 +127,7 @@
             "command": "bash",
             "args": [
                 "-c",
-                "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_complete_test && mkdir build_complete_test && cd build_complete_test && qmake CONFIG+=debug ../complete_test.pro && make"
+                "export PATH=\"/opt/homebrew/opt/qt@5/bin:$PATH\" && cd qt-frontend && rm -rf build_md2docx_app && mkdir build_md2docx_app && cd build_md2docx_app && qmake CONFIG+=debug ../md2docx_app.pro && make"
             ],
             "group": "build",
             "presentation": {
@@ -146,7 +146,7 @@
             "command": "cmd",
             "args": [
                 "/c",
-                "cd qt-frontend && rmdir /s /q build_complete_test 2>nul & mkdir build_complete_test & cd build_complete_test & qmake CONFIG+=debug ..\\complete_test.pro & nmake"
+                "cd qt-frontend && rmdir /s /q build_md2docx_app 2>nul & mkdir build_md2docx_app & cd build_md2docx_app & qmake CONFIG+=debug ..\\md2docx_app.pro & nmake"
             ],
             "group": "build",
             "presentation": {

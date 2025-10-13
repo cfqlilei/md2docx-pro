@@ -52,7 +52,9 @@
             "console": "integratedTerminal",
             "preLaunchTask": "go-mod-tidy",
             "stopOnEntry": false,
-            "dlvFlags": ["--check-go-version=false"]
+            "dlvFlags": [
+                "--check-go-version=false"
+            ]
         },
         {
             "name": "调试Go后端服务 (Windows)",
@@ -71,16 +73,18 @@
             "console": "integratedTerminal",
             "preLaunchTask": "go-mod-tidy",
             "stopOnEntry": false,
-            "dlvFlags": ["--check-go-version=false"]
+            "dlvFlags": [
+                "--check-go-version=false"
+            ]
         },
         {
             "name": "启动Qt前端 (macOS)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.app/Contents/MacOS/complete_test",
+            "program": "${workspaceFolder}/qt-frontend/build_md2docx_app/build/md2docx_app.app/Contents/MacOS/md2docx_app",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "cwd": "${workspaceFolder}/qt-frontend/build_md2docx_app",
             "environment": [
                 {
                     "name": "PATH",
@@ -95,10 +99,10 @@
             "name": "启动Qt前端 (Windows)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.exe",
+            "program": "${workspaceFolder}/qt-frontend/build_md2docx_app/build/md2docx_app.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "cwd": "${workspaceFolder}/qt-frontend/build_md2docx_app",
             "environment": [
                 {
                     "name": "PATH",
@@ -112,10 +116,10 @@
             "name": "调试Qt前端 (macOS)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.app/Contents/MacOS/complete_test",
+            "program": "${workspaceFolder}/qt-frontend/build_md2docx_app/build/md2docx_app.app/Contents/MacOS/md2docx_app",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "cwd": "${workspaceFolder}/qt-frontend/build_md2docx_app",
             "environment": [
                 {
                     "name": "PATH",
@@ -130,10 +134,10 @@
             "name": "调试Qt前端 (Windows)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/qt-frontend/build_complete_test/build/complete_test.exe",
+            "program": "${workspaceFolder}/qt-frontend/build_md2docx_app/build/md2docx_app.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/qt-frontend/build_complete_test",
+            "cwd": "${workspaceFolder}/qt-frontend/build_md2docx_app",
             "environment": [
                 {
                     "name": "PATH",

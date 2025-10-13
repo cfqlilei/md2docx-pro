@@ -57,11 +57,13 @@ SOURCES       = ../src/main_md2docx.cpp \
 		../src/singlefileconverter.cpp \
 		../src/multifileconverter.cpp \
 		../src/settingswidget.cpp \
+		../src/aboutwidget.cpp \
 		../src/httpapi.cpp \
 		../src/appsettings.cpp moc_mainwindow_md2docx.cpp \
 		moc_singlefileconverter.cpp \
 		moc_multifileconverter.cpp \
 		moc_settingswidget.cpp \
+		moc_aboutwidget.cpp \
 		moc_httpapi.cpp \
 		moc_appsettings.cpp
 OBJECTS       = main_md2docx.o \
@@ -69,12 +71,14 @@ OBJECTS       = main_md2docx.o \
 		singlefileconverter.o \
 		multifileconverter.o \
 		settingswidget.o \
+		aboutwidget.o \
 		httpapi.o \
 		appsettings.o \
 		moc_mainwindow_md2docx.o \
 		moc_singlefileconverter.o \
 		moc_multifileconverter.o \
 		moc_settingswidget.o \
+		moc_aboutwidget.o \
 		moc_httpapi.o \
 		moc_appsettings.o
 DIST          = /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_pre.prf \
@@ -261,7 +265,6 @@ DIST          = /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_pre.prf 
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/qt_config.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang/qmake.conf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_post.prf \
-		../.qmake.stash \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/exclusive_builds.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/mac/sdk.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/toolchain.prf \
@@ -293,12 +296,14 @@ DIST          = /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_pre.prf 
 		../src/singlefileconverter.h \
 		../src/multifileconverter.h \
 		../src/settingswidget.h \
+		../src/aboutwidget.h \
 		../src/httpapi.h \
 		../src/appsettings.h ../src/main_md2docx.cpp \
 		../src/mainwindow_md2docx.cpp \
 		../src/singlefileconverter.cpp \
 		../src/multifileconverter.cpp \
 		../src/settingswidget.cpp \
+		../src/aboutwidget.cpp \
 		../src/httpapi.cpp \
 		../src/appsettings.cpp
 QMAKE_TARGET  = md2docx_app
@@ -309,7 +314,7 @@ TARGET        = build/md2docx_app.app/Contents/MacOS/md2docx_app
 EXPORT_QMAKE_MAC_SDK = macosx
 EXPORT_QMAKE_MAC_SDK_VERSION = 15.5
 EXPORT_QMAKE_XCODE_DEVELOPER_PATH = /Library/Developer/CommandLineTools
-EXPORT__QMAKE_STASH_ = /Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/build_md2docx_app/.qmake.stash
+EXPORT__QMAKE_STASH_ = 
 EXPORT_VALID_ARCHS = arm64
 EXPORT_DEFAULT_ARCHS = arm64
 EXPORT_ARCHS = $(filter $(EXPORT_VALID_ARCHS), $(if $(ARCHS), $(ARCHS), $(if $(EXPORT_DEFAULT_ARCHS), $(EXPORT_DEFAULT_ARCHS), $(EXPORT_VALID_ARCHS))))
@@ -509,7 +514,6 @@ Makefile: ../md2docx_app.pro /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clan
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/qt_config.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang/qmake.conf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_post.prf \
-		.qmake.stash \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/exclusive_builds.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/mac/sdk.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/toolchain.prf \
@@ -727,7 +731,6 @@ Makefile: ../md2docx_app.pro /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clan
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/qt_config.prf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang/qmake.conf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_post.prf:
-.qmake.stash:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/exclusive_builds.prf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/mac/sdk.prf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/toolchain.prf:
@@ -785,8 +788,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/mainwindow_md2docx.h ../src/singlefileconverter.h ../src/multifileconverter.h ../src/settingswidget.h ../src/httpapi.h ../src/appsettings.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../src/main_md2docx.cpp ../src/mainwindow_md2docx.cpp ../src/singlefileconverter.cpp ../src/multifileconverter.cpp ../src/settingswidget.cpp ../src/httpapi.cpp ../src/appsettings.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/mainwindow_md2docx.h ../src/singlefileconverter.h ../src/multifileconverter.h ../src/settingswidget.h ../src/aboutwidget.h ../src/httpapi.h ../src/appsettings.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../src/main_md2docx.cpp ../src/mainwindow_md2docx.cpp ../src/singlefileconverter.cpp ../src/multifileconverter.cpp ../src/settingswidget.cpp ../src/aboutwidget.cpp ../src/httpapi.cpp ../src/appsettings.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -797,7 +800,6 @@ clean: compiler_clean
 
 distclean: clean 
 	-$(DEL_FILE) -r build/md2docx_app.app
-	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
 
@@ -822,18 +824,18 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/data/dummy.cpp
 	/Library/Developer/CommandLineTools/usr/bin/clang++ -pipe -stdlib=libc++ -Wall -Wextra -O2 -O2 -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=10.13 -Wall -Wextra -dM -E -o moc_predefs.h /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow_md2docx.cpp moc_singlefileconverter.cpp moc_multifileconverter.cpp moc_settingswidget.cpp moc_httpapi.cpp moc_appsettings.cpp
+compiler_moc_header_make_all: moc_mainwindow_md2docx.cpp moc_singlefileconverter.cpp moc_multifileconverter.cpp moc_settingswidget.cpp moc_aboutwidget.cpp moc_httpapi.cpp moc_appsettings.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow_md2docx.cpp moc_singlefileconverter.cpp moc_multifileconverter.cpp moc_settingswidget.cpp moc_httpapi.cpp moc_appsettings.cpp
+	-$(DEL_FILE) moc_mainwindow_md2docx.cpp moc_singlefileconverter.cpp moc_multifileconverter.cpp moc_settingswidget.cpp moc_aboutwidget.cpp moc_httpapi.cpp moc_appsettings.cpp
 moc_mainwindow_md2docx.cpp: ../src/mainwindow_md2docx.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMenuBar \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmenubar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		moc_predefs.h \
@@ -860,6 +862,13 @@ moc_settingswidget.cpp: ../src/settingswidget.h \
 		moc_predefs.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc
 	/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc $(DEFINES) --include /Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/build_md2docx_app/moc_predefs.h -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/src -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/17/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/Cellar/qt@5/5.15.17/lib ../src/settingswidget.h -o moc_settingswidget.cpp
+
+moc_aboutwidget.cpp: ../src/aboutwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
+		moc_predefs.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc
+	/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc $(DEFINES) --include /Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/build_md2docx_app/moc_predefs.h -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/src -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/17/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/Cellar/qt@5/5.15.17/lib ../src/aboutwidget.h -o moc_aboutwidget.cpp
 
 moc_httpapi.cpp: ../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
@@ -932,25 +941,28 @@ main_md2docx.o: ../src/main_md2docx.cpp /opt/homebrew/Cellar/qt@5/5.15.17/lib/Qt
 		../src/mainwindow_md2docx.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMenuBar \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmenubar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main_md2docx.o ../src/main_md2docx.cpp
 
 mainwindow_md2docx.o: ../src/mainwindow_md2docx.cpp ../src/mainwindow_md2docx.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMenuBar \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmenubar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
+		../src/aboutwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
 		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
@@ -969,8 +981,6 @@ mainwindow_md2docx.o: ../src/mainwindow_md2docx.cpp ../src/mainwindow_md2docx.h 
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QUrl \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qurl.h \
 		../src/multifileconverter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
 		../src/settingswidget.h \
 		../src/singlefileconverter.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QAction \
@@ -1071,6 +1081,8 @@ multifileconverter.o: ../src/multifileconverter.cpp ../src/multifileconverter.h 
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QUrl \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qurl.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QApplication \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDateTime \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdatetime.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QDesktopServices \
@@ -1132,6 +1144,8 @@ settingswidget.o: ../src/settingswidget.cpp ../src/settingswidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdatetime.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDir \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdir.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QFile \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qfile.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QFileDialog \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qfiledialog.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QFileInfo \
@@ -1158,6 +1172,32 @@ settingswidget.o: ../src/settingswidget.cpp ../src/settingswidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtextedit.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o settingswidget.o ../src/settingswidget.cpp
+
+aboutwidget.o: ../src/aboutwidget.cpp ../src/aboutwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QApplication \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QClipboard \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qclipboard.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QDesktopServices \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qdesktopservices.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QGroupBox \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qgroupbox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlabel.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QPushButton \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qpushbutton.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTextEdit \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtextedit.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QUrl \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qurl.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o aboutwidget.o ../src/aboutwidget.cpp
 
 httpapi.o: ../src/httpapi.cpp ../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
@@ -1206,6 +1246,9 @@ moc_multifileconverter.o: moc_multifileconverter.cpp
 
 moc_settingswidget.o: moc_settingswidget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_settingswidget.o moc_settingswidget.cpp
+
+moc_aboutwidget.o: moc_aboutwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_aboutwidget.o moc_aboutwidget.cpp
 
 moc_httpapi.o: moc_httpapi.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_httpapi.o moc_httpapi.cpp
