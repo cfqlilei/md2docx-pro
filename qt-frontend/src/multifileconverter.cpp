@@ -334,15 +334,31 @@ bool MultiFileConverter::validateInputs() {
 
 void MultiFileConverter::showStatus(const QString &message, bool isError) {
   QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss");
-  QString prefix = isError ? "❌" : "ℹ️";
 
-  // 使用HTML格式来改善显示效果
+  // 使用更清晰的图标和颜色
+  QString icon;
+  QString color;
+  if (isError) {
+    icon = "✗"; // 使用叉号表示错误
+    color = "#d32f2f";
+  } else if (message.contains("成功转换") || message.contains("完成")) {
+    icon = "✓"; // 使用勾号表示成功
+    color = "#388e3c";
+  } else {
+    icon = "•"; // 使用圆点表示一般信息
+    color = "#1976d2";
+  }
+
+  // 使用div确保每条消息都换行显示，增加行间距
   QString htmlMessage =
-      QString("<p style='margin: 2px 0; padding: 2px;'>"
-              "<span style='color: #666; font-size: 11px;'>[%1]</span> "
-              "<span style='font-size: 13px;'>%2 %3</span>"
-              "</p>")
-          .arg(timestamp, prefix, message.toHtmlEscaped());
+      QString("<div style='margin: 4px 0; padding: 4px; line-height: 1.5; "
+              "border-left: 3px solid %1; padding-left: 8px;'>"
+              "<span style='color: #666; font-size: 11px;'>[%2]</span> "
+              "<span style='color: %3; font-weight: bold; font-size: "
+              "15px;'>%4</span> "
+              "<span style='font-size: 13px; margin-left: 5px;'>%5</span>"
+              "</div>")
+          .arg(color, timestamp, color, icon, message.toHtmlEscaped());
 
   m_statusText->insertHtml(htmlMessage);
 

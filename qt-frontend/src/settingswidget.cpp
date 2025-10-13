@@ -398,30 +398,39 @@ void SettingsWidget::updateUI() {
 void SettingsWidget::showStatus(const QString &message, bool isError) {
   QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss");
 
-  // 如果消息已经包含表情符号，就不添加前缀
-  QString displayMessage = message;
-  if (!message.contains("✅") && !message.contains("❌") &&
-      !message.contains("ℹ️")) {
-    QString prefix = isError ? "❌" : "ℹ️";
-    displayMessage = QString("%1 %2").arg(prefix, message);
-  }
+  // 确定图标和颜色
+  QString icon;
+  QString color;
 
-  // 使用HTML格式来改善显示效果
-  QString color = isError ? "#d32f2f" : "#1976d2";
-  if (message.contains("✅")) {
+  if (message.contains("✅") || message.contains("成功") ||
+      message.contains("通过")) {
+    icon = "✓"; // 使用勾号表示成功
     color = "#388e3c";
-  } else if (message.contains("❌")) {
+  } else if (message.contains("❌") || message.contains("失败") || isError) {
+    icon = "✗"; // 使用叉号表示错误
     color = "#d32f2f";
-  } else if (message.contains("ℹ️")) {
+  } else if (message.contains("ℹ️") || message.contains("信息")) {
+    icon = "•"; // 使用圆点表示信息
     color = "#1976d2";
+  } else {
+    icon = isError ? "✗" : "•";
+    color = isError ? "#d32f2f" : "#1976d2";
   }
 
+  // 清理消息中的原有图标
+  QString cleanMessage = message;
+  cleanMessage = cleanMessage.remove("✅").remove("❌").remove("ℹ️").trimmed();
+
+  // 使用div确保每条消息都换行显示
   QString htmlMessage =
-      QString("<p style='margin: 2px 0; padding: 2px;'>"
-              "<span style='color: #666; font-size: 10px;'>[%1]</span> "
-              "<span style='color: %2; font-size: 12px;'>%3</span>"
-              "</p>")
-          .arg(timestamp, color, displayMessage.toHtmlEscaped());
+      QString("<div style='margin: 4px 0; padding: 4px; line-height: 1.5; "
+              "border-left: 3px solid %1; padding-left: 8px;'>"
+              "<span style='color: #666; font-size: 11px;'>[%2]</span> "
+              "<span style='color: %3; font-weight: bold; font-size: "
+              "15px;'>%4</span> "
+              "<span style='font-size: 13px; margin-left: 5px;'>%5</span>"
+              "</div>")
+          .arg(color, timestamp, color, icon, cleanMessage.toHtmlEscaped());
 
   m_statusText->insertHtml(htmlMessage);
 

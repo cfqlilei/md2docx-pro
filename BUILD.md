@@ -181,19 +181,19 @@ go mod tidy
 mkdir -p build
 CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -buildvcs=false -o build/md2docx-server-macos ./cmd/server
 
-# 3. 构建Qt前端 (推荐使用single_test，更稳定)
+# 3. 构建Qt前端 (使用md2docx_app项目)
 export PATH="/opt/homebrew/opt/qt@5/bin:$PATH"
 cd qt-frontend
-rm -rf build_single_test
-mkdir build_single_test
-cd build_single_test
-qmake ../single_test.pro
+rm -rf build_md2docx_app
+mkdir build_md2docx_app
+cd build_md2docx_app
+qmake ../md2docx_app.pro
 make
 
 # 4. 验证构建结果
 cd ../../
 ls -la build/md2docx-server-macos
-ls -la qt-frontend/build_single_test/build/single_test.app
+ls -la qt-frontend/build_md2docx_app/build/md2docx_app.app
 
 # 5. 运行测试
 ./test_api_features.sh
@@ -202,7 +202,7 @@ ls -la qt-frontend/build_single_test/build/single_test.app
 **注意事项：**
 
 - 添加了 `-buildvcs=false` 标志解决 VCS 冲突问题
-- 推荐使用 `single_test.pro` 而不是 `complete_test.pro`，因为后者存在编译错误
+- 使用 `md2docx_app.pro` 构建完整的应用程序
 - 确保 Qt 路径正确设置：`/opt/homebrew/opt/qt@5/bin`
 
 #### Windows 命令行构建
@@ -220,19 +220,19 @@ set GOOS=windows
 set GOARCH=amd64
 go build -buildvcs=false -o build\md2docx-server-windows.exe .\cmd\server
 
-REM 3. 构建Qt前端 (推荐使用single_test)
+REM 3. 构建Qt前端 (使用md2docx_app项目)
 set PATH=C:\Qt\5.15.2\msvc2019_64\bin;%PATH%
 cd qt-frontend
-rmdir /s /q build_single_test
-mkdir build_single_test
-cd build_single_test
-qmake ..\single_test.pro
+rmdir /s /q build_md2docx_app
+mkdir build_md2docx_app
+cd build_md2docx_app
+qmake ..\md2docx_app.pro
 nmake
 
 REM 4. 验证构建结果
 cd ..\..\
 dir build\md2docx-server-windows.exe
-dir qt-frontend\build_single_test\build\single_test.exe
+dir qt-frontend\build_md2docx_app\build\md2docx_app.exe
 
 REM 5. 运行测试
 test_api_features.sh
@@ -241,25 +241,45 @@ test_api_features.sh
 **注意事项：**
 
 - 同样添加了 `-buildvcs=false` 标志
-- Windows 版本也推荐使用 `single_test.pro`
+- Windows 版本使用 `md2docx_app.pro` 构建完整应用
 - 确保 Qt 路径正确：`C:\Qt\5.15.2\msvc2019_64\bin`
 
-### 快速启动脚本
+### 快速构建和启动
 
-项目提供了便捷的启动脚本，可以同时启动前后端：
+#### 一键构建脚本 (推荐)
 
-#### macOS
+```bash
+# 构建完整应用 (前后端)
+./scripts/build_complete_app.sh
+```
+
+这个脚本会：
+
+- 检查构建环境 (Go, Qt, Pandoc)
+- 构建 macOS 和 Windows 后端
+- 构建 macOS 前端
+- 创建启动脚本
+- 验证构建结果
+
+#### 快速启动脚本
+
+构建完成后，可以使用以下方式启动：
+
+##### macOS
 
 ```bash
 # 使用Node.js启动脚本 (推荐)
 node scripts/launch_complete_app_macos.js
 
+# 或使用简单启动脚本
+./launch_macos.sh
+
 # 或手动启动
 ./build/md2docx-server-macos &
-./qt-frontend/build_single_test/build/single_test.app/Contents/MacOS/single_test
+./qt-frontend/build_md2docx_app/build/md2docx_app.app/Contents/MacOS/md2docx_app
 ```
 
-#### Windows
+##### Windows
 
 ```cmd
 REM 使用Node.js启动脚本 (推荐)
@@ -267,7 +287,7 @@ node scripts\launch_complete_app_windows.js
 
 REM 或手动启动
 start build\md2docx-server-windows.exe
-start qt-frontend\build_single_test\build\single_test.exe
+start qt-frontend\build_md2docx_app\build\md2docx_app.exe
 ```
 
 **启动脚本功能：**
@@ -277,6 +297,35 @@ start qt-frontend\build_single_test\build\single_test.exe
 - 等待后端服务就绪后再启动前端
 - 统一的日志输出和错误处理
 - 优雅的关闭处理 (Ctrl+C)
+
+### 构建结果说明
+
+成功构建后，项目目录结构如下：
+
+```
+md2docx-src/
+├── build/                                    # 后端构建输出
+│   ├── md2docx-server-macos                 # macOS后端可执行文件
+│   └── md2docx-server-windows.exe           # Windows后端可执行文件
+├── qt-frontend/
+│   └── build_md2docx_app/                   # 前端构建目录
+│       └── build/
+│           └── md2docx_app.app/             # macOS应用包
+│               └── Contents/MacOS/md2docx_app
+├── scripts/
+│   ├── build_complete_app.sh                # 一键构建脚本
+│   ├── launch_complete_app_macos.js         # macOS启动脚本
+│   └── launch_complete_app_windows.js       # Windows启动脚本
+└── launch_macos.sh                          # 简单启动脚本
+```
+
+**文件说明：**
+
+- `build/md2docx-server-macos`: macOS 后端服务器，提供 API 接口
+- `build/md2docx-server-windows.exe`: Windows 后端服务器
+- `qt-frontend/build_md2docx_app/build/md2docx_app.app`: macOS 前端应用包
+- `launch_macos.sh`: 简单的 bash 启动脚本
+- `scripts/launch_complete_app_*.js`: 功能完整的 Node.js 启动脚本
 
 ## 调试说明
 

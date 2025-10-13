@@ -15,7 +15,7 @@ const PROJECT_ROOT = path.resolve(__dirname, "..");
 // 配置
 const CONFIG = {
   backend: {
-    binary: path.join(PROJECT_ROOT, "md2docx-server"),
+    binary: path.join(PROJECT_ROOT, "build", "md2docx-server-macos"),
     port: 8080,
   },
   frontend: {

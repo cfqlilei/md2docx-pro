@@ -265,6 +265,7 @@ DIST          = /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_pre.prf 
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/qt_config.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang/qmake.conf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_post.prf \
+		../../.qmake.stash \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/exclusive_builds.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/mac/sdk.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/toolchain.prf \
@@ -314,7 +315,7 @@ TARGET        = build/md2docx_app.app/Contents/MacOS/md2docx_app
 EXPORT_QMAKE_MAC_SDK = macosx
 EXPORT_QMAKE_MAC_SDK_VERSION = 15.5
 EXPORT_QMAKE_XCODE_DEVELOPER_PATH = /Library/Developer/CommandLineTools
-EXPORT__QMAKE_STASH_ = 
+EXPORT__QMAKE_STASH_ = /Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/.qmake.stash
 EXPORT_VALID_ARCHS = arm64
 EXPORT_DEFAULT_ARCHS = arm64
 EXPORT_ARCHS = $(filter $(EXPORT_VALID_ARCHS), $(if $(ARCHS), $(ARCHS), $(if $(EXPORT_DEFAULT_ARCHS), $(EXPORT_DEFAULT_ARCHS), $(EXPORT_VALID_ARCHS))))
@@ -514,6 +515,7 @@ Makefile: ../md2docx_app.pro /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clan
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/qt_config.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang/qmake.conf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_post.prf \
+		../.qmake.stash \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/exclusive_builds.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/mac/sdk.prf \
 		/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/toolchain.prf \
@@ -731,6 +733,7 @@ Makefile: ../md2docx_app.pro /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clan
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/qt_config.prf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang/qmake.conf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/spec_post.prf:
+../.qmake.stash:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/exclusive_builds.prf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/mac/sdk.prf:
 /opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/features/toolchain.prf:
