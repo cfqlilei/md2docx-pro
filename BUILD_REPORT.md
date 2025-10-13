@@ -1,17 +1,17 @@
 # 整合版构建报告
 
-生成时间: 2025年10月13日 星期一 16时35分50秒 CST
+生成时间: 2025年10月13日 星期一 18时48分11秒 CST
 
 ## 构建结果
 
 ### macOS版本
 - ✅ 应用包: qt-frontend/build_simple_integrated/build_simple_integrated/release/md2docx_simple_integrated.app
-- 📦 大小: 8.3M
-- 🔧 前端: 232K
-- 🔧 后端: 8.0M
+- 📦 大小: 260K
+- 🔧 前端: 252K
+- 🔧 后端: 
 
 ### Windows版本
-- ✅ 后端: build/md2docx-server-windows.exe (8.5M)
+- ✅ 后端: build/md2docx-server-windows.exe ()
 - ⚠️  前端: 需要在Windows环境下构建
 
 ## 启动方式

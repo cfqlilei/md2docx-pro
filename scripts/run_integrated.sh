@@ -38,8 +38,8 @@ log "项目目录: $PROJECT_ROOT"
 
 # 检查应用是否存在
 check_app_exists() {
-    APP_PATH="qt-frontend/build_simple_integrated/build_simple_integrated/release/md2docx_simple_integrated.app"
-    
+    APP_PATH="build/release/md2docx_simple_integrated.app"
+
     if [ ! -d "$APP_PATH" ]; then
         error "整合版应用不存在: $APP_PATH"
         log "请先运行构建流程:"
@@ -48,47 +48,47 @@ check_app_exists() {
         log "  3. ./scripts/build_integrated.sh    # 构建"
         exit 1
     fi
-    
+
     success "找到整合版应用: $APP_PATH"
     return 0
 }
 
 # 检查应用完整性
 check_app_integrity() {
-    APP_PATH="qt-frontend/build_simple_integrated/build_simple_integrated/release/md2docx_simple_integrated.app"
-    
+    APP_PATH="build/release/md2docx_simple_integrated.app"
+
     # 检查前端可执行文件
     if [ ! -f "$APP_PATH/Contents/MacOS/md2docx_simple_integrated" ]; then
         error "前端可执行文件不存在"
         exit 1
     fi
     success "前端可执行文件存在"
-    
+
     # 检查内嵌后端
     if [ ! -f "$APP_PATH/Contents/MacOS/md2docx-server-macos" ]; then
         error "内嵌后端服务器不存在"
         exit 1
     fi
     success "内嵌后端服务器存在"
-    
+
     # 检查执行权限
     if [ ! -x "$APP_PATH/Contents/MacOS/md2docx_simple_integrated" ]; then
         warning "前端可执行文件没有执行权限，正在修复..."
         chmod +x "$APP_PATH/Contents/MacOS/md2docx_simple_integrated"
     fi
-    
+
     if [ ! -x "$APP_PATH/Contents/MacOS/md2docx-server-macos" ]; then
         warning "后端可执行文件没有执行权限，正在修复..."
         chmod +x "$APP_PATH/Contents/MacOS/md2docx-server-macos"
     fi
-    
+
     success "应用完整性检查通过"
 }
 
 # 显示应用信息
 show_app_info() {
-    APP_PATH="qt-frontend/build_simple_integrated/build_simple_integrated/release/md2docx_simple_integrated.app"
-    
+    APP_PATH="build/release/md2docx_simple_integrated.app"
+
     log "应用信息:"
     log "  📦 应用包大小: $(du -sh "$APP_PATH" | cut -f1)"
     log "  🖥️  前端大小: $(du -sh "$APP_PATH/Contents/MacOS/md2docx_simple_integrated" | cut -f1)"
@@ -98,24 +98,26 @@ show_app_info() {
 
 # 启动应用
 launch_app() {
-    APP_PATH="qt-frontend/build_simple_integrated/build_simple_integrated/release/md2docx_simple_integrated.app"
-    
+    APP_PATH="build/release/md2docx_simple_integrated.app"
+
     log "🚀 启动整合版应用..."
-    
+
     # 使用open命令启动应用
     open "$APP_PATH"
-    
+
     if [ $? -eq 0 ]; then
         success "整合版应用已启动！"
         log ""
         log "应用特点:"
         log "  ✓ 单一程序，无需分别启动前后端"
         log "  ✓ 内嵌Go后端服务，自动启动"
+        log "  ✓ 动态端口分配，避免冲突"
         log "  ✓ 完整的GUI界面"
         log "  ✓ 所有功能都已整合"
         log ""
         log "使用说明:"
         log "  • 应用启动后会自动启动内嵌的后端服务器"
+        log "  • 后端会自动分配可用端口，避免冲突"
         log "  • 如果看到服务器启动中的提示，请等待几秒钟"
         log "  • 状态栏会显示服务器运行状态"
         log "  • 关闭应用时会自动停止后端服务器"

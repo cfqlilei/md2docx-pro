@@ -84,11 +84,25 @@ func (c *Config) Save() error {
 
 // ValidatePandoc 验证Pandoc路径是否有效
 func (c *Config) ValidatePandoc() error {
+	// 如果路径为空，尝试自动检测
 	if c.PandocPath == "" {
-		return fmt.Errorf("Pandoc路径未配置")
+		if pandocPath, err := findPandoc(); err == nil {
+			c.PandocPath = pandocPath
+		} else {
+			return fmt.Errorf("Pandoc路径未配置且无法自动检测: %v", err)
+		}
 	}
 
-	// 检查文件是否存在
+	// 如果路径不是绝对路径（如"pandoc"），直接尝试执行
+	if c.PandocPath == "pandoc" || !filepath.IsAbs(c.PandocPath) {
+		cmd := exec.Command(c.PandocPath, "--version")
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("Pandoc执行失败: %v", err)
+		}
+		return nil
+	}
+
+	// 检查绝对路径的文件是否存在
 	if _, err := os.Stat(c.PandocPath); os.IsNotExist(err) {
 		return fmt.Errorf("Pandoc可执行文件不存在: %s", c.PandocPath)
 	}

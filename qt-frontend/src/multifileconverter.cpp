@@ -243,13 +243,13 @@ void MultiFileConverter::onBatchConversionFinished(
     for (const auto &result : response.results) {
       if (result.success) {
         successCount++;
-        showStatus(QString("✅ 成功转换: %1 → %2")
+        showStatus(QString("成功转换: %1 → %2")
                        .arg(QFileInfo(result.inputFile).fileName(),
                             QFileInfo(result.outputFile).fileName()));
       } else {
         failCount++;
         showStatus(
-            QString("❌ 转换失败: %1 - 错误: %2")
+            QString("转换失败: %1 - 错误: %2")
                 .arg(QFileInfo(result.inputFile).fileName(), result.error),
             true);
       }
@@ -282,8 +282,11 @@ void MultiFileConverter::onBatchConversionFinished(
       }
     }
   } else {
-    showStatus(QString("❌ 批量转换失败！\n错误信息: %1").arg(response.message),
-               true);
+    QString errorMsg = response.message;
+    if (!response.error.isEmpty()) {
+      errorMsg += QString("\n详细错误: %1").arg(response.error);
+    }
+    showStatus(QString("批量转换失败！错误信息: %1").arg(errorMsg), true);
   }
 
   emit conversionFinished(response.success, response.message);

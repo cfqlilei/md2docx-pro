@@ -313,20 +313,50 @@ void SettingsWidget::onPandocPathChanged() {
 void SettingsWidget::onTemplateFileChanged() { updateUI(); }
 
 void SettingsWidget::onConfigReceived(const ConfigData &config) {
-  m_pandocPathEdit->setText(config.pandocPath);
+  QString pandocPath = config.pandocPath;
+
+  // 如果配置中的Pandoc路径为空，尝试自动检测
+  if (pandocPath.isEmpty()) {
+    showStatus("配置中Pandoc路径为空，正在自动检测...");
+    pandocPath = detectPandocPath();
+    if (!pandocPath.isEmpty()) {
+      showStatus(QString("自动检测到Pandoc路径: %1").arg(pandocPath));
+    } else {
+      showStatus("未能自动检测到Pandoc路径，请手动设置", true);
+    }
+  } else {
+    // 验证配置中的路径是否有效
+    if (!validatePandocPath(pandocPath)) {
+      showStatus(QString("配置中的Pandoc路径无效: %1，正在自动检测...")
+                     .arg(pandocPath),
+                 true);
+      QString detectedPath = detectPandocPath();
+      if (!detectedPath.isEmpty()) {
+        pandocPath = detectedPath;
+        showStatus(QString("自动检测到有效的Pandoc路径: %1").arg(pandocPath));
+      } else {
+        showStatus("未能自动检测到有效的Pandoc路径，保留原配置", true);
+      }
+    }
+  }
+
+  m_pandocPathEdit->setText(pandocPath);
   m_templateFileEdit->setText(config.templateFile);
   m_useTemplateCheckBox->setChecked(!config.templateFile.isEmpty());
 
   m_configLoaded = true;
-  m_currentPandocPath = config.pandocPath;
+  m_currentPandocPath = pandocPath;
   m_currentTemplateFile = config.templateFile;
 
-  showStatus("配置加载成功");
+  showStatus("配置加载完成");
   updateUI();
 
-  // 自动测试Pandoc
-  if (!config.pandocPath.isEmpty()) {
+  // 自动测试Pandoc路径
+  if (!pandocPath.isEmpty()) {
     testPandocPath();
+  } else {
+    m_pandocStatusLabel->setText("未配置");
+    m_pandocStatusLabel->setStyleSheet("color: gray;");
   }
 }
 

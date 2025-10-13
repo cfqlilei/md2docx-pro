@@ -5,14 +5,18 @@ REM 清理所有构建文件和临时文件
 echo === Markdown转Word工具 - 整合版清理 ===
 echo 开始清理构建文件...
 
-REM 清理Go构建文件
-echo 清理Go后端构建文件...
+REM 清理build目录（统一构建输出目录）
+echo 清理build目录...
 if exist "build" (
     rmdir /s /q "build"
     echo ✅ 删除 build\ 目录
 ) else (
     echo ⚠️  build\ 目录不存在
 )
+
+REM 重新创建build目录结构
+mkdir build\release
+echo ✅ 重新创建 build\release\ 目录
 
 REM 清理Go模块缓存
 echo 清理Go模块缓存...

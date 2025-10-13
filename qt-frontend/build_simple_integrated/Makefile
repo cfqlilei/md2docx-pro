@@ -836,20 +836,16 @@ compiler_moc_header_make_all: build_simple_integrated/release/moc/moc_embeddedse
 compiler_moc_header_clean:
 	-$(DEL_FILE) build_simple_integrated/release/moc/moc_embeddedserver.cpp build_simple_integrated/release/moc/moc_singlefileconverter.cpp build_simple_integrated/release/moc/moc_multifileconverter.cpp build_simple_integrated/release/moc/moc_settingswidget.cpp build_simple_integrated/release/moc/moc_aboutwidget.cpp build_simple_integrated/release/moc/moc_httpapi.cpp build_simple_integrated/release/moc/moc_appsettings.cpp
 build_simple_integrated/release/moc/moc_embeddedserver.cpp: ../src/embeddedserver.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QThread \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qthread.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QMutex \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qmutex.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
 		build_simple_integrated/release/moc/moc_predefs.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc
 	/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc $(DEFINES) --include /Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/build_simple_integrated/build_simple_integrated/release/moc/moc_predefs.h -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/src -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/17/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/Cellar/qt@5/5.15.17/lib ../src/embeddedserver.h -o build_simple_integrated/release/moc/moc_embeddedserver.cpp
@@ -933,18 +929,14 @@ build_simple_integrated/release/moc/main_simple_integrated.moc: ../src/main_simp
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
 		../src/embeddedserver.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QThread \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qthread.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QMutex \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qmutex.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkRequest \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkrequest.h \
@@ -1013,18 +1005,14 @@ build_simple_integrated/release/obj/main_simple_integrated.o: ../src/main_simple
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
 		../src/embeddedserver.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QThread \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qthread.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QMutex \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qmutex.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
 		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkRequest \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkrequest.h \
@@ -1068,26 +1056,26 @@ build_simple_integrated/release/obj/main_simple_integrated.o: ../src/main_simple
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build_simple_integrated/release/obj/main_simple_integrated.o ../src/main_simple_integrated.cpp
 
 build_simple_integrated/release/obj/embeddedserver.o: ../src/embeddedserver.cpp ../src/embeddedserver.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qtimer.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QThread \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qthread.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QMutex \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qmutex.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QApplication \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDebug \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdebug.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDir \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdir.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QFile \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qfile.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QFileInfo \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qfileinfo.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QJsonDocument \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qjsondocument.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QJsonObject \

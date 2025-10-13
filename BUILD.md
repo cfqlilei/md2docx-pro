@@ -250,6 +250,10 @@ test_api_features.sh
 
 **特点**: 前后端合并为一个程序，双击即可运行，无需分别启动前后端服务。
 
+**构建输出**: 所有构建产物统一输出到 `build/release/` 目录，便于管理和分发。
+
+**动态端口**: 后端自动分配可用端口（8080-8090 范围），避免端口冲突，支持多实例运行。
+
 ##### macOS 构建步骤
 
 **独立步骤**:
@@ -304,10 +308,20 @@ scripts\all_in_one_integrated_windows.bat
 
 - ✅ 单一程序，用户友好
 - ✅ 内嵌后端服务，自动启动
+- ✅ 动态端口分配，避免冲突
+- ✅ 统一构建目录，便于管理
 - ✅ 无需技术知识，双击即用
 - ✅ 完全自包含，便于分发
 - ✅ 分步骤脚本，便于调试
 - ✅ 一键脚本，快速构建
+
+**构建产物**:
+
+- `build/release/md2docx_simple_integrated.app` - macOS 整合版应用
+- `build/release/md2docx_simple_integrated.exe` - Windows 整合版应用
+- `build/release/md2docx-server-macos` - macOS 后端服务器
+- `build/release/md2docx-server-windows.exe` - Windows 后端服务器
+- `config.json` - 动态端口配置文件
 
 #### 分离版本 - 前后端独立运行
 

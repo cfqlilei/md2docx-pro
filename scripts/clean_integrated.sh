@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 整合版清理脚本
-# 清理所有构建文件和临时文件
+# 清理所有构建文件和临时文件，统一使用build目录
 
 set -e
 
@@ -32,8 +32,8 @@ cd "$PROJECT_ROOT"
 log "开始清理整合版构建文件"
 log "项目目录: $PROJECT_ROOT"
 
-# 清理Go构建文件
-log "清理Go后端构建文件..."
+# 清理build目录（统一的构建输出目录）
+log "清理build目录..."
 if [ -d "build" ]; then
     rm -rf build
     success "删除 build/ 目录"
@@ -41,33 +41,23 @@ else
     warning "build/ 目录不存在"
 fi
 
+# 重新创建build目录结构
+mkdir -p build/release
+success "重新创建 build/release/ 目录"
+
 # 清理Go模块缓存
 log "清理Go模块缓存..."
-go clean -cache
-go clean -modcache
+go clean -cache 2>/dev/null || true
+go clean -modcache 2>/dev/null || true
 success "Go缓存清理完成"
 
 # 清理Qt构建文件
 log "清理Qt前端构建文件..."
 
-# 清理整合版构建
-if [ -d "qt-frontend/build_simple_integrated" ]; then
-    rm -rf qt-frontend/build_simple_integrated
-    success "删除 qt-frontend/build_simple_integrated/ 目录"
-else
-    warning "qt-frontend/build_simple_integrated/ 目录不存在"
-fi
-
-# 清理分离版构建
-if [ -d "qt-frontend/build_md2docx_app" ]; then
-    rm -rf qt-frontend/build_md2docx_app
-    success "删除 qt-frontend/build_md2docx_app/ 目录"
-else
-    warning "qt-frontend/build_md2docx_app/ 目录不存在"
-fi
-
-# 清理其他构建目录
+# 清理所有Qt构建目录
 BUILD_DIRS=(
+    "qt-frontend/build_simple_integrated"
+    "qt-frontend/build_md2docx_app"
     "qt-frontend/build_integrated"
     "qt-frontend/build"
     "qt-frontend/debug"
@@ -128,14 +118,20 @@ if [ -d "dist" ]; then
     success "删除 dist/ 目录"
 fi
 
+# 清理配置文件
+log "清理配置文件..."
+rm -f config.json
+success "删除配置文件"
+
 success "=== 清理完成 ==="
 log "已清理的内容:"
-log "  ✓ Go后端构建文件 (build/)"
+log "  ✓ build/release/ 目录（统一构建输出）"
 log "  ✓ Go模块缓存"
 log "  ✓ Qt前端构建文件"
 log "  ✓ 临时文件和缓存"
 log "  ✓ 生成的启动脚本"
 log "  ✓ 测试结果文件"
 log "  ✓ 分发文件"
+log "  ✓ 配置文件"
 log ""
 log "现在可以进行全新构建了！"

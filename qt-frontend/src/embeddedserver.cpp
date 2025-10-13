@@ -2,6 +2,8 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
@@ -15,8 +17,14 @@ EmbeddedServer::EmbeddedServer(QObject *parent)
       m_healthCheckTimer(new QTimer(this)),
       m_networkManager(new QNetworkAccessManager(this)), m_serverPort(8080),
       m_serverRunning(false), m_serverHealthy(false) {
-  // 查找可用端口
-  findAvailablePort();
+  // 首先尝试从配置文件读取端口
+  loadPortFromConfig();
+
+  // 如果配置文件中没有端口或端口不可用，查找可用端口
+  if (m_serverPort == 0 || !isPortAvailable(m_serverPort)) {
+    findAvailablePort();
+  }
+
   m_serverUrl = QString("http://localhost:%1").arg(m_serverPort);
 
   // 设置健康检查定时器
@@ -270,4 +278,84 @@ void EmbeddedServer::setupHealthCheckTimer() {
   m_healthCheckTimer->setSingleShot(false);
   connect(m_healthCheckTimer, &QTimer::timeout, this,
           &EmbeddedServer::performHealthCheck);
+}
+
+void EmbeddedServer::loadPortFromConfig() {
+  // 获取配置文件路径
+  QString configPath = getConfigFilePath();
+
+  QFileInfo configFile(configPath);
+  if (!configFile.exists()) {
+    qDebug() << "配置文件不存在，使用默认端口:" << configPath;
+    return;
+  }
+
+  // 读取配置文件
+  QFile file(configPath);
+  if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "无法读取配置文件:" << configPath;
+    return;
+  }
+
+  QByteArray data = file.readAll();
+  file.close();
+
+  // 解析JSON
+  QJsonParseError error;
+  QJsonDocument doc = QJsonDocument::fromJson(data, &error);
+  if (error.error != QJsonParseError::NoError) {
+    qDebug() << "配置文件JSON解析失败:" << error.errorString();
+    return;
+  }
+
+  QJsonObject config = doc.object();
+  if (config.contains("server_port")) {
+    int port = config["server_port"].toInt();
+    if (port > 0 && port <= 65535) {
+      m_serverPort = port;
+      qDebug() << "从配置文件读取端口:" << port;
+    }
+  }
+}
+
+QString EmbeddedServer::getConfigFilePath() {
+  QString appDir = QApplication::applicationDirPath();
+
+  // 尝试多个可能的配置文件位置
+  QStringList possiblePaths;
+
+  // 1. 与可执行文件在同一目录（应用包内）
+  possiblePaths << appDir + "/config.json";
+
+  // 2. 项目根目录（开发模式）
+  possiblePaths << appDir + "/../../../config.json";
+  possiblePaths << appDir + "/../../config.json";
+  possiblePaths << appDir + "/../config.json";
+
+  // 3. build目录（后端运行位置）
+  possiblePaths << appDir + "/../../../build/config.json";
+  possiblePaths << appDir + "/../../build/config.json";
+  possiblePaths << appDir + "/../build/config.json";
+
+  // 查找第一个存在的配置文件
+  for (const QString &path : possiblePaths) {
+    QFileInfo fileInfo(path);
+    if (fileInfo.exists()) {
+      qDebug() << "找到配置文件:" << fileInfo.absoluteFilePath();
+      return fileInfo.absoluteFilePath();
+    }
+  }
+
+  // 如果都不存在，返回默认路径（应用包内）
+  QString defaultPath = appDir + "/config.json";
+  qDebug() << "使用默认配置文件路径:" << defaultPath;
+  return defaultPath;
+}
+
+bool EmbeddedServer::isPortAvailable(int port) {
+  QTcpSocket socket;
+  socket.connectToHost("localhost", port);
+  bool available = !socket.waitForConnected(100);
+  socket.disconnectFromHost();
+  return available;
 }

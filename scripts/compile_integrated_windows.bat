@@ -43,7 +43,7 @@ echo.
 echo 编译Go后端...
 
 REM 创建构建目录
-if not exist "build" mkdir "build"
+if not exist "build\release" mkdir "build\release"
 
 REM 更新依赖
 echo 更新Go依赖...
@@ -54,7 +54,7 @@ echo 编译Windows后端...
 set CGO_ENABLED=1
 set GOOS=windows
 set GOARCH=amd64
-go build -buildvcs=false -o build\md2docx-server-windows.exe .\cmd\server
+go build -buildvcs=false -o build\release\md2docx-server-windows.exe .\cmd\server
 if errorlevel 1 (
     echo ❌ Windows后端编译失败
     pause
@@ -67,7 +67,7 @@ echo 编译macOS后端...
 set CGO_ENABLED=1
 set GOOS=darwin
 set GOARCH=arm64
-go build -buildvcs=false -o build\md2docx-server-macos .\cmd\server
+go build -buildvcs=false -o build\release\md2docx-server-macos .\cmd\server
 if errorlevel 1 (
     echo ❌ macOS后端编译失败
     pause
@@ -113,16 +113,16 @@ echo.
 echo 验证编译结果...
 
 REM 检查后端文件
-if exist "build\md2docx-server-windows.exe" (
-    echo ✅ Windows后端: build\md2docx-server-windows.exe
+if exist "build\release\md2docx-server-windows.exe" (
+    echo ✅ Windows后端: build\release\md2docx-server-windows.exe
 ) else (
     echo ❌ Windows后端文件不存在
     pause
     exit /b 1
 )
 
-if exist "build\md2docx-server-macos" (
-    echo ✅ macOS后端: build\md2docx-server-macos
+if exist "build\release\md2docx-server-macos" (
+    echo ✅ macOS后端: build\release\md2docx-server-macos
 ) else (
     echo ❌ macOS后端文件不存在
     pause
@@ -131,11 +131,18 @@ if exist "build\md2docx-server-macos" (
 
 REM 检查前端可执行文件
 if exist "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe" (
-    echo ✅ Windows前端: qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe
-    
-    REM 复制后端到前端目录
-    copy "build\md2docx-server-windows.exe" "qt-frontend\build_simple_integrated\release\" >nul
-    echo ✅ 后端已复制到前端目录
+    echo ✅ Windows前端编译完成
+
+    REM 移动前端到build/release目录
+    echo 移动应用到build/release目录...
+    copy "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe" "build\release\" >nul
+    echo ✅ 应用已移动到 build\release\md2docx_simple_integrated.exe
+
+    REM 复制后端到build/release目录（如果还没有）
+    if not exist "build\release\md2docx-server-windows.exe" (
+        copy "build\release\md2docx-server-windows.exe" "build\release\" >nul
+    )
+    echo ✅ 后端已准备就绪
 ) else (
     echo ❌ Windows前端可执行文件不存在
     pause
@@ -145,9 +152,9 @@ if exist "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.
 echo.
 echo ✅ === 编译完成 ===
 echo 编译结果:
-echo   Windows后端: build\md2docx-server-windows.exe
-echo   macOS后端: build\md2docx-server-macos
-echo   Windows整合版应用: qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe
+echo   Windows后端: build\release\md2docx-server-windows.exe
+echo   macOS后端: build\release\md2docx-server-macos
+echo   Windows整合版应用: build\release\md2docx_simple_integrated.exe
 echo.
-echo 下一步: 运行 scripts\run_integrated_windows.bat 启动应用
+echo 下一步: 运行 scripts\build_integrated_windows.bat 构建最终应用
 pause

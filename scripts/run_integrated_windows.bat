@@ -6,7 +6,7 @@ echo === Markdown转Word工具 - 整合版运行 ===
 echo 启动整合版应用...
 
 REM 检查应用是否存在
-set APP_PATH=qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe
+set APP_PATH=build\release\md2docx_simple_integrated.exe
 
 if not exist "%APP_PATH%" (
     echo ❌ 整合版应用不存在: %APP_PATH%
@@ -31,14 +31,14 @@ if not exist "%APP_PATH%" (
 )
 echo ✅ 前端可执行文件存在
 
-REM 检查内嵌后端
-set BACKEND_PATH=qt-frontend\build_simple_integrated\release\md2docx-server-windows.exe
+REM 检查后端
+set BACKEND_PATH=build\release\md2docx-server-windows.exe
 if not exist "%BACKEND_PATH%" (
-    echo ❌ 内嵌后端服务器不存在
+    echo ❌ 后端服务器不存在
     pause
     exit /b 1
 )
-echo ✅ 内嵌后端服务器存在
+echo ✅ 后端服务器存在
 
 echo ✅ 应用完整性检查通过
 
@@ -65,11 +65,13 @@ if errorlevel 1 (
     echo 应用特点:
     echo   ✓ 单一程序，无需分别启动前后端
     echo   ✓ 内嵌Go后端服务，自动启动
+    echo   ✓ 动态端口分配，避免冲突
     echo   ✓ 完整的GUI界面
     echo   ✓ 所有功能都已整合
     echo.
     echo 使用说明:
     echo   • 应用启动后会自动启动内嵌的后端服务器
+    echo   • 后端会自动分配可用端口，避免冲突
     echo   • 如果看到服务器启动中的提示，请等待几秒钟
     echo   • 状态栏会显示服务器运行状态
     echo   • 关闭应用时会自动停止后端服务器

@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"md2docx/internal/api"
@@ -17,6 +19,36 @@ func main() {
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatalf("加载配置失败: %v", err)
+	}
+
+	// 检查是否通过环境变量指定端口
+	if envPort := os.Getenv("SERVER_PORT"); envPort != "" {
+		if port, err := strconv.Atoi(envPort); err == nil && port > 0 {
+			cfg.ServerPort = port
+		}
+	}
+
+	// 如果端口为0或被占用，动态分配端口
+	if cfg.ServerPort == 0 || !isPortAvailable(cfg.ServerPort) {
+		availablePort, err := findAvailablePort()
+		if err != nil {
+			log.Fatalf("无法找到可用端口: %v", err)
+		}
+		cfg.ServerPort = availablePort
+
+		// 保存新端口到配置文件
+		if err := cfg.Save(); err != nil {
+			log.Printf("警告: 无法保存端口配置: %v", err)
+		} else {
+			log.Printf("端口配置已保存: %d", cfg.ServerPort)
+		}
+	} else {
+		// 即使端口可用，也保存配置文件以确保前端能读取
+		if err := cfg.Save(); err != nil {
+			log.Printf("警告: 无法保存端口配置: %v", err)
+		} else {
+			log.Printf("端口配置已保存: %d", cfg.ServerPort)
+		}
 	}
 
 	// 打印启动信息
@@ -73,4 +105,35 @@ func main() {
 	} else {
 		fmt.Println("服务器已关闭")
 	}
+}
+
+// isPortAvailable 检查端口是否可用
+func isPortAvailable(port int) bool {
+	address := fmt.Sprintf(":%d", port)
+	listener, err := net.Listen("tcp", address)
+	if err != nil {
+		return false
+	}
+	defer listener.Close()
+	return true
+}
+
+// findAvailablePort 查找可用端口
+func findAvailablePort() (int, error) {
+	// 首先尝试8080-8090范围
+	for port := 8080; port <= 8090; port++ {
+		if isPortAvailable(port) {
+			return port, nil
+		}
+	}
+
+	// 如果都不可用，让系统分配一个随机端口
+	listener, err := net.Listen("tcp", ":0")
+	if err != nil {
+		return 0, fmt.Errorf("无法获取可用端口: %v", err)
+	}
+	defer listener.Close()
+
+	addr := listener.Addr().(*net.TCPAddr)
+	return addr.Port, nil
 }

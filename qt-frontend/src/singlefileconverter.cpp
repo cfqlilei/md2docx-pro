@@ -231,7 +231,7 @@ void SingleFileConverter::onConversionFinished(
   m_convertButton->setText("开始转换");
 
   if (response.success) {
-    showStatus(QString("✅ 转换成功！\n输出文件: %1").arg(response.outputFile));
+    showStatus(QString("转换成功！输出文件: %1").arg(response.outputFile));
 
     // 询问是否打开文件所在目录
     QMessageBox::StandardButton reply = QMessageBox::question(
@@ -257,8 +257,11 @@ void SingleFileConverter::onConversionFinished(
 #endif
     }
   } else {
-    showStatus(QString("❌ 转换失败！\n错误信息: %1").arg(response.message),
-               true);
+    QString errorMsg = response.message;
+    if (!response.error.isEmpty()) {
+      errorMsg += QString("\n详细错误: %1").arg(response.error);
+    }
+    showStatus(QString("转换失败！错误信息: %1").arg(errorMsg), true);
   }
 
   emit conversionFinished(response.success, response.message);
@@ -294,8 +297,26 @@ bool SingleFileConverter::validateInputs() {
 
 void SingleFileConverter::showStatus(const QString &message, bool isError) {
   QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss");
-  QString prefix = isError ? "❌" : "ℹ️";
-  m_statusText->append(QString("[%1] %2 %3").arg(timestamp, prefix, message));
+  QString color = isError ? "#d32f2f" : "#1976d2";
+  QString icon = isError ? "❌" : "•";
+
+  // 使用div确保每条消息都换行显示，增加行间距
+  QString htmlMessage =
+      QString("<div style='margin: 4px 0; padding: 4px; line-height: 1.5; "
+              "border-left: 3px solid %1; padding-left: 8px;'>"
+              "<span style='color: #666; font-size: 11px;'>[%2]</span> "
+              "<span style='color: %3; font-weight: bold; font-size: "
+              "15px;'>%4</span> "
+              "<span style='font-size: 13px; margin-left: 5px;'>%5</span>"
+              "</div>")
+          .arg(color, timestamp, color, icon, message.toHtmlEscaped());
+
+  m_statusText->insertHtml(htmlMessage);
+
+  // 滚动到底部
+  QTextCursor cursor = m_statusText->textCursor();
+  cursor.movePosition(QTextCursor::End);
+  m_statusText->setTextCursor(cursor);
 }
 
 void SingleFileConverter::clearStatus() { m_statusText->clear(); }
