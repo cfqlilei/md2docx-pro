@@ -250,15 +250,54 @@ test_api_features.sh
 
 **特点**: 前后端合并为一个程序，双击即可运行，无需分别启动前后端服务。
 
-```bash
-# 构建整合版本
-cd qt-frontend
-mkdir -p build_simple_integrated && cd build_simple_integrated
-qmake ../md2docx_simple_integrated.pro && make
+##### macOS 构建步骤
 
-# 启动整合版本
-cd ../../
-./launch_integrated_simple.sh
+**独立步骤**:
+
+```bash
+# 1. 清理构建文件
+./scripts/clean_integrated.sh
+
+# 2. 编译前后端
+./scripts/compile_integrated.sh
+
+# 3. 构建应用包
+./scripts/build_integrated.sh
+
+# 4. 启动应用
+./scripts/run_integrated.sh
+```
+
+**一次性执行**:
+
+```bash
+# 清理 -> 编译 -> 构建 -> 运行 (一键完成)
+./scripts/all_in_one_integrated.sh
+```
+
+##### Windows 构建步骤
+
+**独立步骤**:
+
+```cmd
+REM 1. 清理构建文件
+scripts\clean_integrated_windows.bat
+
+REM 2. 编译前后端
+scripts\compile_integrated_windows.bat
+
+REM 3. 构建应用包
+scripts\build_integrated_windows.bat
+
+REM 4. 启动应用
+scripts\run_integrated_windows.bat
+```
+
+**一次性执行**:
+
+```cmd
+REM 清理 -> 编译 -> 构建 -> 运行 (一键完成)
+scripts\all_in_one_integrated_windows.bat
 ```
 
 **优势**:
@@ -267,6 +306,8 @@ cd ../../
 - ✅ 内嵌后端服务，自动启动
 - ✅ 无需技术知识，双击即用
 - ✅ 完全自包含，便于分发
+- ✅ 分步骤脚本，便于调试
+- ✅ 一键脚本，快速构建
 
 #### 分离版本 - 前后端独立运行
 

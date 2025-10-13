@@ -922,9 +922,17 @@ compiler_moc_source_make_all: build_simple_integrated/release/moc/main_simple_in
 compiler_moc_source_clean:
 	-$(DEL_FILE) build_simple_integrated/release/moc/main_simple_integrated.moc
 build_simple_integrated/release/moc/main_simple_integrated.moc: ../src/main_simple_integrated.cpp \
-		../src/embeddedserver.h \
+		../src/aboutwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
+		../src/appsettings.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QSettings \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qsettings.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
+		../src/embeddedserver.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
@@ -937,12 +945,6 @@ build_simple_integrated/release/moc/main_simple_integrated.moc: ../src/main_simp
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
-		../src/singlefileconverter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
-		../src/multifileconverter.h \
-		../src/settingswidget.h \
-		../src/aboutwidget.h \
 		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkRequest \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkrequest.h \
@@ -954,36 +956,34 @@ build_simple_integrated/release/moc/main_simple_integrated.moc: ../src/main_simp
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qjsonarray.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QUrl \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qurl.h \
-		../src/appsettings.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QSettings \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qsettings.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
+		../src/multifileconverter.h \
+		../src/settingswidget.h \
+		../src/singlefileconverter.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QApplication \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QCloseEvent \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qevent.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlabel.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPainter \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpainter.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPixmap \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpixmap.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QProgressBar \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qprogressbar.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QSplashScreen \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qsplashscreen.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QLabel \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlabel.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QProgressBar \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qprogressbar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QSplashScreen \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qsplashscreen.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPixmap \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpixmap.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPainter \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpainter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QCloseEvent \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qevent.h \
 		build_simple_integrated/release/moc/moc_predefs.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc
 	/opt/homebrew/Cellar/qt@5/5.15.17/bin/moc $(DEFINES) --include /Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/build_simple_integrated/build_simple_integrated/release/moc/moc_predefs.h -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend -I/Users/chenfengqing/1-share-disk/disk/e/WEDev/WeDev/demo/cfqlilei-git/pandoc-md2docx/md2docx-src/qt-frontend/src -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -I. -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1 -I/Library/Developer/CommandLineTools/usr/lib/clang/17/include -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include -I/Library/Developer/CommandLineTools/usr/include -F/opt/homebrew/Cellar/qt@5/5.15.17/lib ../src/main_simple_integrated.cpp -o build_simple_integrated/release/moc/main_simple_integrated.moc
@@ -1002,9 +1002,17 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_mo
 
 ####### Compile
 
-build_simple_integrated/release/obj/main_simple_integrated.o: ../src/main_simple_integrated.cpp ../src/embeddedserver.h \
+build_simple_integrated/release/obj/main_simple_integrated.o: ../src/main_simple_integrated.cpp ../src/aboutwidget.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
+		../src/appsettings.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QSettings \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qsettings.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
+		../src/embeddedserver.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QTimer \
@@ -1017,12 +1025,6 @@ build_simple_integrated/release/obj/main_simple_integrated.o: ../src/main_simple
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkReply \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
-		../src/singlefileconverter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
-		../src/multifileconverter.h \
-		../src/settingswidget.h \
-		../src/aboutwidget.h \
 		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkRequest \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkrequest.h \
@@ -1034,36 +1036,34 @@ build_simple_integrated/release/obj/main_simple_integrated.o: ../src/main_simple
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qjsonarray.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QUrl \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qurl.h \
-		../src/appsettings.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QSettings \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qsettings.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
+		../src/multifileconverter.h \
+		../src/settingswidget.h \
+		../src/singlefileconverter.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QApplication \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QCloseEvent \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qevent.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QHBoxLayout \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qboxlayout.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QLabel \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlabel.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMainWindow \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmainwindow.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPainter \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpainter.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPixmap \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpixmap.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QProgressBar \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qprogressbar.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QSplashScreen \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qsplashscreen.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTabWidget \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtabwidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qboxlayout.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QHBoxLayout \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QLabel \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlabel.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QProgressBar \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qprogressbar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QStatusBar \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qstatusbar.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QSplashScreen \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qsplashscreen.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPixmap \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpixmap.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QPainter \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qpainter.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QCloseEvent \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qevent.h \
 		build_simple_integrated/release/moc/main_simple_integrated.moc
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build_simple_integrated/release/obj/main_simple_integrated.o ../src/main_simple_integrated.cpp
 
@@ -1084,22 +1084,22 @@ build_simple_integrated/release/obj/embeddedserver.o: ../src/embeddedserver.cpp 
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkreply.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QApplication \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qapplication.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDebug \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdebug.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDir \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdir.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QStandardPaths \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstandardpaths.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkRequest \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkrequest.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QJsonDocument \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qjsondocument.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QJsonObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qjsonobject.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDebug \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdebug.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QTcpSocket \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qtcpsocket.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkRequest \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkrequest.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QRandomGenerator \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qrandom.h
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qrandom.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QStandardPaths \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstandardpaths.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QTcpSocket \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qtcpsocket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build_simple_integrated/release/obj/embeddedserver.o ../src/embeddedserver.cpp
 
 build_simple_integrated/release/obj/singlefileconverter.o: ../src/singlefileconverter.cpp ../src/singlefileconverter.h \

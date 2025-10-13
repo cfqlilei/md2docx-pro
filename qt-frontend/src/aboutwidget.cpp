@@ -82,7 +82,7 @@ void AboutWidget::setupUI() {
   m_gitHubUrlText = new QTextEdit(this);
   m_gitHubUrlText->setMaximumHeight(60);
   m_gitHubUrlText->setReadOnly(true);
-  m_gitHubUrlText->setText("https://github.com/cfqlilei/pandoc-md2docx");
+  m_gitHubUrlText->setText("https://github.com/cfqlilei/md2docx");
   projectLayout->addWidget(m_gitHubUrlText);
 
   m_gitHubButton = new QPushButton("访问GitHub仓库", this);
@@ -133,7 +133,7 @@ void AboutWidget::setupConnections() {
 }
 
 void AboutWidget::openGitHubRepository() {
-  QString url = "https://github.com/cfqlilei/pandoc-md2docx";
+  QString url = "https://github.com/cfqlilei/md2docx";
   if (!QDesktopServices::openUrl(QUrl(url))) {
     QMessageBox::warning(
         this, "打开失败",
