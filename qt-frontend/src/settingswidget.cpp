@@ -16,6 +16,7 @@
 #include <QProcess>
 #include <QPushButton>
 #include <QStandardPaths>
+#include <QTextCursor>
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -344,9 +345,24 @@ void SettingsWidget::onConfigUpdated(bool success, const QString &message) {
 
 void SettingsWidget::onConfigValidated(bool success, const QString &message) {
   if (success) {
-    showStatus("配置验证成功");
+    showStatus("✅ 配置验证通过！");
+    // 显示详细的验证结果
+    QStringList lines = message.split('\n');
+    for (const QString &line : lines) {
+      if (!line.trimmed().isEmpty()) {
+        showStatus(line.trimmed());
+      }
+    }
   } else {
-    showStatus(QString("配置验证失败: %1").arg(message), true);
+    showStatus("❌ 配置验证失败！", true);
+    // 显示详细的验证结果
+    QStringList lines = message.split('\n');
+    for (const QString &line : lines) {
+      if (!line.trimmed().isEmpty()) {
+        bool isError = line.contains("❌");
+        showStatus(line.trimmed(), isError);
+      }
+    }
   }
   updateUI();
 }
@@ -381,8 +397,38 @@ void SettingsWidget::updateUI() {
 
 void SettingsWidget::showStatus(const QString &message, bool isError) {
   QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss");
-  QString prefix = isError ? "❌" : "ℹ️";
-  m_statusText->append(QString("[%1] %2 %3").arg(timestamp, prefix, message));
+
+  // 如果消息已经包含表情符号，就不添加前缀
+  QString displayMessage = message;
+  if (!message.contains("✅") && !message.contains("❌") &&
+      !message.contains("ℹ️")) {
+    QString prefix = isError ? "❌" : "ℹ️";
+    displayMessage = QString("%1 %2").arg(prefix, message);
+  }
+
+  // 使用HTML格式来改善显示效果
+  QString color = isError ? "#d32f2f" : "#1976d2";
+  if (message.contains("✅")) {
+    color = "#388e3c";
+  } else if (message.contains("❌")) {
+    color = "#d32f2f";
+  } else if (message.contains("ℹ️")) {
+    color = "#1976d2";
+  }
+
+  QString htmlMessage =
+      QString("<p style='margin: 2px 0; padding: 2px;'>"
+              "<span style='color: #666; font-size: 10px;'>[%1]</span> "
+              "<span style='color: %2; font-size: 12px;'>%3</span>"
+              "</p>")
+          .arg(timestamp, color, displayMessage.toHtmlEscaped());
+
+  m_statusText->insertHtml(htmlMessage);
+
+  // 滚动到底部
+  QTextCursor cursor = m_statusText->textCursor();
+  cursor.movePosition(QTextCursor::End);
+  m_statusText->setTextCursor(cursor);
 }
 
 void SettingsWidget::clearStatus() { m_statusText->clear(); }

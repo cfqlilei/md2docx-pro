@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"md2docx/internal/config"
 	"md2docx/internal/converter"
@@ -128,25 +129,40 @@ func (h *Handler) ValidateConfig(w http.ResponseWriter, r *http.Request) {
 
 	response := &models.ConfigResponse{
 		Success:      true,
-		Message:      "配置验证成功",
+		Message:      "",
 		PandocPath:   h.config.PandocPath,
 		TemplateFile: h.config.TemplateFile,
 	}
 
-	// 验证Pandoc
+	var validationMessages []string
+	var hasErrors bool
+
+	// 验证Pandoc路径
 	if err := h.config.ValidatePandoc(); err != nil {
-		response.Success = false
-		response.Error = fmt.Sprintf("Pandoc配置无效: %v", err)
-		h.sendJSONResponse(w, response, http.StatusOK)
-		return
+		hasErrors = true
+		validationMessages = append(validationMessages, fmt.Sprintf("❌ Pandoc路径验证失败: %v", err))
+	} else {
+		validationMessages = append(validationMessages, "✅ Pandoc路径验证成功")
 	}
 
-	// 验证模板文件
-	if err := h.config.ValidateTemplate(); err != nil {
-		response.Success = false
-		response.Error = fmt.Sprintf("模板文件配置无效: %v", err)
-		h.sendJSONResponse(w, response, http.StatusOK)
-		return
+	// 验证模板文件（如果配置了模板文件）
+	if h.config.TemplateFile != "" {
+		if err := h.config.ValidateTemplate(); err != nil {
+			hasErrors = true
+			validationMessages = append(validationMessages, fmt.Sprintf("❌ 模板文件验证失败: %v", err))
+		} else {
+			validationMessages = append(validationMessages, "✅ 模板文件验证成功")
+		}
+	} else {
+		validationMessages = append(validationMessages, "ℹ️ 未配置模板文件（可选）")
+	}
+
+	// 设置响应结果
+	response.Success = !hasErrors
+	response.Message = strings.Join(validationMessages, "\n")
+
+	if hasErrors {
+		response.Error = "配置验证存在问题，请检查上述错误信息"
 	}
 
 	h.sendJSONResponse(w, response, http.StatusOK)

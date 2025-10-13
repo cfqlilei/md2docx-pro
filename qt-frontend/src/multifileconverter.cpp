@@ -1,4 +1,5 @@
 #include "multifileconverter.h"
+#include "appsettings.h"
 #include "httpapi.h"
 
 #include <QApplication>
@@ -16,6 +17,7 @@
 #include <QProgressBar>
 #include <QPushButton>
 #include <QStandardPaths>
+#include <QTextCursor>
 #include <QTextEdit>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -99,9 +101,15 @@ void MultiFileConverter::setupUI() {
   QVBoxLayout *statusLayout = new QVBoxLayout(m_statusGroup);
 
   m_statusText = new QTextEdit(this);
-  m_statusText->setMaximumHeight(120);
+  m_statusText->setMaximumHeight(200); // 增大高度从120到200
   m_statusText->setReadOnly(true);
   m_statusText->setPlaceholderText("批量转换状态和结果将在这里显示...");
+
+  // 设置更大的字体
+  QFont statusFont = m_statusText->font();
+  statusFont.setPointSize(statusFont.pointSize() + 2); // 增大字体2个点
+  m_statusText->setFont(statusFont);
+
   statusLayout->addWidget(m_statusText);
 
   m_progressBar = new QProgressBar(this);
@@ -139,14 +147,18 @@ void MultiFileConverter::setupConnections() {
 }
 
 void MultiFileConverter::selectInputFiles() {
+  AppSettings *settings = AppSettings::instance();
+  QString lastDir = settings->getLastMultiInputDir();
+
   QStringList fileNames = QFileDialog::getOpenFileNames(
-      this, "选择Markdown文件",
-      m_lastOutputDir.isEmpty()
-          ? QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
-          : m_lastOutputDir,
+      this, "选择Markdown文件", lastDir,
       "Markdown文件 (*.md *.markdown *.mdown *.mkd);;所有文件 (*)");
 
   if (!fileNames.isEmpty()) {
+    // 保存选择文件所在的目录到配置
+    QFileInfo firstFileInfo(fileNames.first());
+    settings->setLastMultiInputDir(firstFileInfo.absolutePath());
+
     addFilesToList(fileNames);
     updateUI();
     showStatus(QString("已添加 %1 个文件").arg(fileNames.size()));
@@ -190,6 +202,10 @@ void MultiFileConverter::startBatchConversion() {
   // 清空之前的状态信息
   clearStatus();
 
+  // 添加分隔线
+  m_statusText->insertHtml(
+      "<hr style='border: 1px solid #ccc; margin: 5px 0;'>");
+
   showStatus(QString("开始批量转换 %1 个文件...").arg(m_inputFiles.size()));
   showStatus(QString("输出目录: %1")
                  .arg(m_outputDirEdit->text().isEmpty()
@@ -227,13 +243,13 @@ void MultiFileConverter::onBatchConversionFinished(
     for (const auto &result : response.results) {
       if (result.success) {
         successCount++;
-        showStatus(QString("✅ %1 -> %2")
+        showStatus(QString("✅ 成功转换: %1 → %2")
                        .arg(QFileInfo(result.inputFile).fileName(),
                             QFileInfo(result.outputFile).fileName()));
       } else {
         failCount++;
         showStatus(
-            QString("❌ %1: %2")
+            QString("❌ 转换失败: %1 - 错误: %2")
                 .arg(QFileInfo(result.inputFile).fileName(), result.error),
             true);
       }
@@ -319,7 +335,21 @@ bool MultiFileConverter::validateInputs() {
 void MultiFileConverter::showStatus(const QString &message, bool isError) {
   QString timestamp = QDateTime::currentDateTime().toString("hh:mm:ss");
   QString prefix = isError ? "❌" : "ℹ️";
-  m_statusText->append(QString("[%1] %2 %3").arg(timestamp, prefix, message));
+
+  // 使用HTML格式来改善显示效果
+  QString htmlMessage =
+      QString("<p style='margin: 2px 0; padding: 2px;'>"
+              "<span style='color: #666; font-size: 11px;'>[%1]</span> "
+              "<span style='font-size: 13px;'>%2 %3</span>"
+              "</p>")
+          .arg(timestamp, prefix, message.toHtmlEscaped());
+
+  m_statusText->insertHtml(htmlMessage);
+
+  // 滚动到底部
+  QTextCursor cursor = m_statusText->textCursor();
+  cursor.movePosition(QTextCursor::End);
+  m_statusText->setTextCursor(cursor);
 }
 
 void MultiFileConverter::clearStatus() { m_statusText->clear(); }

@@ -1062,9 +1062,14 @@ singlefileconverter.o: ../src/singlefileconverter.cpp ../src/singlefileconverter
 multifileconverter.o: ../src/multifileconverter.cpp ../src/multifileconverter.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QWidget \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qwidget.h \
-		../src/httpapi.h \
+		../src/appsettings.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QObject \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qobject.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QSettings \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qsettings.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
+		../src/httpapi.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkAccessManager \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/qnetworkaccessmanager.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers/QNetworkRequest \
@@ -1111,6 +1116,8 @@ multifileconverter.o: ../src/multifileconverter.cpp ../src/multifileconverter.h 
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qpushbutton.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QStandardPaths \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstandardpaths.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QTextCursor \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qtextcursor.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTextEdit \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtextedit.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout
@@ -1168,6 +1175,8 @@ settingswidget.o: ../src/settingswidget.cpp ../src/settingswidget.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qpushbutton.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QStandardPaths \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstandardpaths.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QTextCursor \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qtextcursor.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTextEdit \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtextedit.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout
@@ -1229,10 +1238,10 @@ appsettings.o: ../src/appsettings.cpp ../src/appsettings.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qsettings.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QString \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstring.h \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QStandardPaths \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstandardpaths.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QDir \
-		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdir.h
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qdir.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QStandardPaths \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstandardpaths.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o appsettings.o ../src/appsettings.cpp
 
 moc_mainwindow_md2docx.o: moc_mainwindow_md2docx.cpp 
