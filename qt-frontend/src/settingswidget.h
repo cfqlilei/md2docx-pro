@@ -13,6 +13,9 @@ class QPushButton;
 class QTextEdit;
 class QGroupBox;
 class QCheckBox;
+class QProcess;
+class QProgressBar;
+class QMessageBox;
 QT_END_NAMESPACE
 
 class HttpApi;
@@ -45,6 +48,7 @@ signals:
 private slots:
   void selectPandocPath();
   void testPandocPath();
+  void installPandoc();
   void selectTemplateFile();
   void clearTemplateFile();
   void loadCurrentConfig();
@@ -56,6 +60,9 @@ private slots:
   void onConfigReceived(const ConfigData &config);
   void onConfigUpdated(bool success, const QString &message);
   void onConfigValidated(bool success, const QString &message);
+  void onInstallProcessFinished(int exitCode, int exitStatus);
+  void onInstallProcessError(int error);
+  void onInstallProcessOutput();
 
 private:
   void setupUI();
@@ -67,12 +74,21 @@ private:
   bool validatePandocPath(const QString &path);
   bool validateTemplateFile(const QString &path);
 
+  // Pandoc安装相关方法
+  QString detectOperatingSystem();
+  QString detectRegion();
+  bool isPandocInstalled();
+  QString getPandocInstallCommand();
+  void startPandocInstallation();
+
   // UI组件
   QGroupBox *m_pandocGroup;
   QLineEdit *m_pandocPathEdit;
   QPushButton *m_selectPandocButton;
   QPushButton *m_testPandocButton;
+  QPushButton *m_installPandocButton;
   QLabel *m_pandocStatusLabel;
+  QProgressBar *m_installProgressBar;
 
   QGroupBox *m_templateGroup;
   QLineEdit *m_templateFileEdit;
@@ -95,6 +111,10 @@ private:
   bool m_configLoaded;
   QString m_currentPandocPath;
   QString m_currentTemplateFile;
+
+  // Pandoc安装相关
+  QProcess *m_installProcess;
+  bool m_isInstalling;
 };
 
 #endif // SETTINGSWIDGET_H

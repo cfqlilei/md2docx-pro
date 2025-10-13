@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SettingsWidget_t {
-    QByteArrayData data[20];
-    char stringdata0[286];
+    QByteArrayData data[27];
+    char stringdata0[396];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -37,32 +37,41 @@ QT_MOC_LITERAL(1, 15, 13), // "configChanged"
 QT_MOC_LITERAL(2, 29, 0), // ""
 QT_MOC_LITERAL(3, 30, 16), // "selectPandocPath"
 QT_MOC_LITERAL(4, 47, 14), // "testPandocPath"
-QT_MOC_LITERAL(5, 62, 18), // "selectTemplateFile"
-QT_MOC_LITERAL(6, 81, 17), // "clearTemplateFile"
-QT_MOC_LITERAL(7, 99, 17), // "loadCurrentConfig"
-QT_MOC_LITERAL(8, 117, 10), // "saveConfig"
-QT_MOC_LITERAL(9, 128, 14), // "validateConfig"
-QT_MOC_LITERAL(10, 143, 15), // "resetToDefaults"
-QT_MOC_LITERAL(11, 159, 19), // "onPandocPathChanged"
-QT_MOC_LITERAL(12, 179, 21), // "onTemplateFileChanged"
-QT_MOC_LITERAL(13, 201, 16), // "onConfigReceived"
-QT_MOC_LITERAL(14, 218, 10), // "ConfigData"
-QT_MOC_LITERAL(15, 229, 6), // "config"
-QT_MOC_LITERAL(16, 236, 15), // "onConfigUpdated"
-QT_MOC_LITERAL(17, 252, 7), // "success"
-QT_MOC_LITERAL(18, 260, 7), // "message"
-QT_MOC_LITERAL(19, 268, 17) // "onConfigValidated"
+QT_MOC_LITERAL(5, 62, 13), // "installPandoc"
+QT_MOC_LITERAL(6, 76, 18), // "selectTemplateFile"
+QT_MOC_LITERAL(7, 95, 17), // "clearTemplateFile"
+QT_MOC_LITERAL(8, 113, 17), // "loadCurrentConfig"
+QT_MOC_LITERAL(9, 131, 10), // "saveConfig"
+QT_MOC_LITERAL(10, 142, 14), // "validateConfig"
+QT_MOC_LITERAL(11, 157, 15), // "resetToDefaults"
+QT_MOC_LITERAL(12, 173, 19), // "onPandocPathChanged"
+QT_MOC_LITERAL(13, 193, 21), // "onTemplateFileChanged"
+QT_MOC_LITERAL(14, 215, 16), // "onConfigReceived"
+QT_MOC_LITERAL(15, 232, 10), // "ConfigData"
+QT_MOC_LITERAL(16, 243, 6), // "config"
+QT_MOC_LITERAL(17, 250, 15), // "onConfigUpdated"
+QT_MOC_LITERAL(18, 266, 7), // "success"
+QT_MOC_LITERAL(19, 274, 7), // "message"
+QT_MOC_LITERAL(20, 282, 17), // "onConfigValidated"
+QT_MOC_LITERAL(21, 300, 24), // "onInstallProcessFinished"
+QT_MOC_LITERAL(22, 325, 8), // "exitCode"
+QT_MOC_LITERAL(23, 334, 10), // "exitStatus"
+QT_MOC_LITERAL(24, 345, 21), // "onInstallProcessError"
+QT_MOC_LITERAL(25, 367, 5), // "error"
+QT_MOC_LITERAL(26, 373, 22) // "onInstallProcessOutput"
 
     },
     "SettingsWidget\0configChanged\0\0"
     "selectPandocPath\0testPandocPath\0"
-    "selectTemplateFile\0clearTemplateFile\0"
-    "loadCurrentConfig\0saveConfig\0"
-    "validateConfig\0resetToDefaults\0"
+    "installPandoc\0selectTemplateFile\0"
+    "clearTemplateFile\0loadCurrentConfig\0"
+    "saveConfig\0validateConfig\0resetToDefaults\0"
     "onPandocPathChanged\0onTemplateFileChanged\0"
     "onConfigReceived\0ConfigData\0config\0"
     "onConfigUpdated\0success\0message\0"
-    "onConfigValidated"
+    "onConfigValidated\0onInstallProcessFinished\0"
+    "exitCode\0exitStatus\0onInstallProcessError\0"
+    "error\0onInstallProcessOutput"
 };
 #undef QT_MOC_LITERAL
 
@@ -72,7 +81,7 @@ static const uint qt_meta_data_SettingsWidget[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -80,22 +89,26 @@ static const uint qt_meta_data_SettingsWidget[] = {
        1,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   84,    2, 0x06 /* Public */,
+       1,    0,  104,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       3,    0,   85,    2, 0x08 /* Private */,
-       4,    0,   86,    2, 0x08 /* Private */,
-       5,    0,   87,    2, 0x08 /* Private */,
-       6,    0,   88,    2, 0x08 /* Private */,
-       7,    0,   89,    2, 0x08 /* Private */,
-       8,    0,   90,    2, 0x08 /* Private */,
-       9,    0,   91,    2, 0x08 /* Private */,
-      10,    0,   92,    2, 0x08 /* Private */,
-      11,    0,   93,    2, 0x08 /* Private */,
-      12,    0,   94,    2, 0x08 /* Private */,
-      13,    1,   95,    2, 0x08 /* Private */,
-      16,    2,   98,    2, 0x08 /* Private */,
-      19,    2,  103,    2, 0x08 /* Private */,
+       3,    0,  105,    2, 0x08 /* Private */,
+       4,    0,  106,    2, 0x08 /* Private */,
+       5,    0,  107,    2, 0x08 /* Private */,
+       6,    0,  108,    2, 0x08 /* Private */,
+       7,    0,  109,    2, 0x08 /* Private */,
+       8,    0,  110,    2, 0x08 /* Private */,
+       9,    0,  111,    2, 0x08 /* Private */,
+      10,    0,  112,    2, 0x08 /* Private */,
+      11,    0,  113,    2, 0x08 /* Private */,
+      12,    0,  114,    2, 0x08 /* Private */,
+      13,    0,  115,    2, 0x08 /* Private */,
+      14,    1,  116,    2, 0x08 /* Private */,
+      17,    2,  119,    2, 0x08 /* Private */,
+      20,    2,  124,    2, 0x08 /* Private */,
+      21,    2,  129,    2, 0x08 /* Private */,
+      24,    1,  134,    2, 0x08 /* Private */,
+      26,    0,  137,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -111,9 +124,13 @@ static const uint qt_meta_data_SettingsWidget[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 14,   15,
-    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   17,   18,
-    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   17,   18,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 15,   16,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   18,   19,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString,   18,   19,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,   22,   23,
+    QMetaType::Void, QMetaType::Int,   25,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -127,17 +144,21 @@ void SettingsWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         case 0: _t->configChanged(); break;
         case 1: _t->selectPandocPath(); break;
         case 2: _t->testPandocPath(); break;
-        case 3: _t->selectTemplateFile(); break;
-        case 4: _t->clearTemplateFile(); break;
-        case 5: _t->loadCurrentConfig(); break;
-        case 6: _t->saveConfig(); break;
-        case 7: _t->validateConfig(); break;
-        case 8: _t->resetToDefaults(); break;
-        case 9: _t->onPandocPathChanged(); break;
-        case 10: _t->onTemplateFileChanged(); break;
-        case 11: _t->onConfigReceived((*reinterpret_cast< const ConfigData(*)>(_a[1]))); break;
-        case 12: _t->onConfigUpdated((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
-        case 13: _t->onConfigValidated((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 3: _t->installPandoc(); break;
+        case 4: _t->selectTemplateFile(); break;
+        case 5: _t->clearTemplateFile(); break;
+        case 6: _t->loadCurrentConfig(); break;
+        case 7: _t->saveConfig(); break;
+        case 8: _t->validateConfig(); break;
+        case 9: _t->resetToDefaults(); break;
+        case 10: _t->onPandocPathChanged(); break;
+        case 11: _t->onTemplateFileChanged(); break;
+        case 12: _t->onConfigReceived((*reinterpret_cast< const ConfigData(*)>(_a[1]))); break;
+        case 13: _t->onConfigUpdated((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 14: _t->onConfigValidated((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 15: _t->onInstallProcessFinished((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 16: _t->onInstallProcessError((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 17: _t->onInstallProcessOutput(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -181,13 +202,13 @@ int SettingsWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 18;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 18)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 14;
+        _id -= 18;
     }
     return _id;
 }

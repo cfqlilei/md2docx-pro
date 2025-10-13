@@ -138,13 +138,25 @@ main() {
     log "构建结果:"
 
     VERSION=$(cat VERSION 2>/dev/null || echo "dev")
-    APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.app"
-    if [ -d "$APP_PATH" ]; then
-        log "  📦 应用包: $APP_PATH"
-        log "  📏 大小: $(du -sh "$APP_PATH" | cut -f1)"
-        log "  🚀 状态: 已启动"
+
+    # 显示macOS应用信息
+    MACOS_APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.app"
+    if [ -d "$MACOS_APP_PATH" ]; then
+        log "  📦 macOS应用: $MACOS_APP_PATH"
+        log "  📏 macOS大小: $(du -sh "$MACOS_APP_PATH" | cut -f1)"
+        log "  🚀 macOS状态: 已启动"
     else
-        warning "应用包未找到，可能构建失败"
+        warning "macOS应用包未找到，可能构建失败"
+    fi
+
+    # 显示Windows应用信息
+    WINDOWS_APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.exe"
+    if [ -f "$WINDOWS_APP_PATH" ]; then
+        log "  📦 Windows应用: $WINDOWS_APP_PATH"
+        log "  📏 Windows大小: $(du -sh "$WINDOWS_APP_PATH" | cut -f1)"
+        log "  🚀 Windows状态: 已就绪"
+    else
+        warning "Windows应用未找到，可能构建失败"
     fi
 
     log ""

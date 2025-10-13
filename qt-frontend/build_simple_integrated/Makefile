@@ -1260,18 +1260,26 @@ build_simple_integrated/release/obj/settingswidget.o: ../src/settingswidget.cpp 
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlabel.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QLineEdit \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qlineedit.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QLocale \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qlocale.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QMessageBox \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qmessagebox.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QProcess \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qprocess.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QProgressBar \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qprogressbar.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QPushButton \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qpushbutton.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QStandardPaths \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qstandardpaths.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QSysInfo \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qsysinfo.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/QTextCursor \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers/qtextcursor.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QTextEdit \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/qtextedit.h \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/QThread \
+		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers/qthread.h \
 		/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers/QVBoxLayout
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o build_simple_integrated/release/obj/settingswidget.o ../src/settingswidget.cpp
 
