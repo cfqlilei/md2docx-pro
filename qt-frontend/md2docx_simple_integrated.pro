@@ -1,0 +1,91 @@
+QT += core widgets network
+
+CONFIG += c++17
+
+# 应用程序信息
+TARGET = md2docx_simple_integrated
+TEMPLATE = app
+
+# 版本信息
+VERSION = 1.0.0
+
+# 源文件 - 使用现有的文件，只修改main
+SOURCES += \
+    src/main_simple_integrated.cpp \
+    src/embeddedserver.cpp \
+    src/singlefileconverter.cpp \
+    src/multifileconverter.cpp \
+    src/settingswidget.cpp \
+    src/aboutwidget.cpp \
+    src/httpapi.cpp \
+    src/appsettings.cpp
+
+# 头文件
+HEADERS += \
+    src/embeddedserver.h \
+    src/singlefileconverter.h \
+    src/multifileconverter.h \
+    src/settingswidget.h \
+    src/aboutwidget.h \
+    src/httpapi.h \
+    src/appsettings.h
+
+# 包含路径
+INCLUDEPATH += src
+
+# 构建目录
+CONFIG(debug, debug|release) {
+    DESTDIR = build_simple_integrated/debug
+    OBJECTS_DIR = build_simple_integrated/debug/obj
+    MOC_DIR = build_simple_integrated/debug/moc
+    RCC_DIR = build_simple_integrated/debug/rcc
+    UI_DIR = build_simple_integrated/debug/ui
+} else {
+    DESTDIR = build_simple_integrated/release
+    OBJECTS_DIR = build_simple_integrated/release/obj
+    MOC_DIR = build_simple_integrated/release/moc
+    RCC_DIR = build_simple_integrated/release/rcc
+    UI_DIR = build_simple_integrated/release/ui
+}
+
+# 平台特定配置
+macx {
+    # macOS配置
+    
+    # 复制后端可执行文件到应用包
+    QMAKE_POST_LINK += $$quote(mkdir -p $$DESTDIR/$${TARGET}.app/Contents/MacOS/)
+    QMAKE_POST_LINK += && $$quote(cp $$PWD/../build/md2docx-server-macos $$DESTDIR/$${TARGET}.app/Contents/MacOS/ 2>/dev/null || true)
+    
+    # macOS特定编译选项
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
+    QMAKE_CXXFLAGS += -stdlib=libc++
+}
+
+win32 {
+    # Windows配置
+    
+    # 复制后端可执行文件到输出目录
+    QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/md2docx-server-windows.exe) $$shell_path($$DESTDIR/) 2>nul || echo.)
+    
+    # Windows特定编译选项
+    QMAKE_CXXFLAGS += /utf-8
+    DEFINES += WIN32_LEAN_AND_MEAN
+}
+
+# 编译器警告
+QMAKE_CXXFLAGS += -Wall -Wextra
+
+# 调试信息
+CONFIG(debug, debug|release) {
+    DEFINES += DEBUG
+    QMAKE_CXXFLAGS += -g
+} else {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+    QMAKE_CXXFLAGS += -O2
+}
+
+# 消息输出
+message("构建简单整合版 Markdown转Word工具")
+message("目标平台: $$QMAKESPEC")
+message("Qt版本: $$[QT_VERSION]")
+message("输出目录: $$DESTDIR")
