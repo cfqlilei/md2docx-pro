@@ -15,19 +15,19 @@ const PROJECT_ROOT = path.resolve(__dirname, "..");
 // 配置
 const CONFIG = {
   backend: {
-    binary: path.join(PROJECT_ROOT, "build", "md2docx-server-macos"),
+    binary: path.join(PROJECT_ROOT, "md2docx-server"),
     port: 8080,
   },
   frontend: {
     binary: path.join(
       PROJECT_ROOT,
       "qt-frontend",
-      "build_single_test",
+      "build_md2docx_app",
       "build",
-      "single_test.app",
+      "md2docx_app.app",
       "Contents",
       "MacOS",
-      "single_test"
+      "md2docx_app"
     ),
   },
 };

@@ -1,0 +1,5 @@
+{
+  "pandoc_path": "/opt/homebrew/bin/pandoc",
+  "template_file": "",
+  "server_port": 8080
+}

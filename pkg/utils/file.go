@@ -73,13 +73,17 @@ func DetermineOutputPath(inputFile, outputDir, outputName string) (string, error
 	var finalOutputName string
 	if outputName != "" {
 		finalOutputName = outputName
+		// 如果用户指定的文件名已经有.docx扩展名，不要重复添加
+		if !strings.HasSuffix(strings.ToLower(finalOutputName), ".docx") {
+			finalOutputName += ".docx"
+		}
 	} else {
 		baseName := filepath.Base(inputFile)
-		finalOutputName = strings.TrimSuffix(baseName, filepath.Ext(baseName))
+		finalOutputName = strings.TrimSuffix(baseName, filepath.Ext(baseName)) + ".docx"
 	}
 
 	// 构建完整的输出路径
-	outputPath := filepath.Join(finalOutputDir, finalOutputName+".docx")
+	outputPath := filepath.Join(finalOutputDir, finalOutputName)
 
 	return outputPath, nil
 }

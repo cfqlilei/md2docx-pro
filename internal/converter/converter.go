@@ -2,7 +2,10 @@ package converter
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 	"sync"
 
 	"md2docx/internal/config"
@@ -157,6 +160,36 @@ func (c *Converter) convertFile(inputFile, outputFile, templateFile string) erro
 		"-o", outputFile,
 		"-f", "markdown",
 		"-t", "docx",
+		"--standalone",
+		"--embed-resources", // 将图片等资源嵌入到输出文件中
+	}
+
+	// 添加资源路径参数，让pandoc能够找到相对路径的图片
+	// 获取输入文件的目录作为资源根目录
+	inputDir := filepath.Dir(inputFile)
+	if inputDir != "." && inputDir != "" {
+		// 添加输入文件目录和常见的图片目录到资源路径
+		resourcePaths := []string{
+			inputDir,                           // 输入文件所在目录
+			filepath.Join(inputDir, "images"),  // images子目录
+			filepath.Join(inputDir, "figures"), // figures子目录
+			filepath.Join(inputDir, "pics"),    // pics子目录
+			filepath.Join(inputDir, "assets"),  // assets子目录
+		}
+
+		// 检查哪些路径实际存在
+		var existingPaths []string
+		for _, path := range resourcePaths {
+			if _, err := os.Stat(path); err == nil {
+				existingPaths = append(existingPaths, path)
+			}
+		}
+
+		// 如果有存在的路径，添加到pandoc参数中
+		if len(existingPaths) > 0 {
+			resourcePathArg := strings.Join(existingPaths, string(os.PathListSeparator))
+			args = append(args, "--resource-path", resourcePathArg)
+		}
 	}
 
 	// 如果指定了模板文件，添加模板参数
