@@ -24,7 +24,7 @@ error() {
 
 log "启动整合版应用"
 
-APP_PATH="build/md2docx_simple_integrated.app"
+APP_PATH="build/release/md2docx_simple_integrated-v1.0.0.app"
 
 if [ -d "$APP_PATH" ]; then
     success "找到整合版应用: $APP_PATH"

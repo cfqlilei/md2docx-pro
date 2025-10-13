@@ -14,7 +14,21 @@ import (
 	"md2docx/internal/config"
 )
 
+// 版本信息，在构建时通过ldflags注入
+var (
+	Version   = "dev"
+	BuildTime = "unknown"
+	GitCommit = "unknown"
+)
+
 func main() {
+	// 输出版本信息
+	fmt.Printf("=== Markdown转Word工具服务器 ===\n")
+	fmt.Printf("版本: %s\n", Version)
+	fmt.Printf("构建时间: %s\n", BuildTime)
+	fmt.Printf("Git提交: %s\n", GitCommit)
+	fmt.Printf("服务器端口: %d\n", 8080)
+
 	// 加载配置
 	cfg, err := config.Load()
 	if err != nil {

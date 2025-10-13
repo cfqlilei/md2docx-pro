@@ -34,7 +34,11 @@ public:
         m_tabWidget(nullptr), m_statusLabel(nullptr),
         m_serverStatusLabel(nullptr), m_progressBar(nullptr),
         m_serverRunning(false) {
+#ifdef APP_VERSION
+    setWindowTitle(QString("Markdown转Word工具 - 整合版 v%1").arg(APP_VERSION));
+#else
     setWindowTitle("Markdown转Word工具 - 整合版");
+#endif
     resize(900, 700);
 
     setupUI();
@@ -211,7 +215,11 @@ int main(int argc, char *argv[]) {
 
   // 设置应用程序信息
   app.setApplicationName("Markdown转Word工具");
-  app.setApplicationVersion("1.0.0");
+#ifdef APP_VERSION
+  app.setApplicationVersion(APP_VERSION);
+#else
+  app.setApplicationVersion("dev");
+#endif
   app.setOrganizationName("MD2DOCX");
 
   // 显示启动画面

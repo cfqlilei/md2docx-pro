@@ -136,17 +136,20 @@ main() {
     success "整合版应用已成功构建并启动！"
     log ""
     log "构建结果:"
-    
-    APP_PATH="qt-frontend/build_simple_integrated/build_simple_integrated/release/md2docx_simple_integrated.app"
+
+    VERSION=$(cat VERSION 2>/dev/null || echo "dev")
+    APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.app"
     if [ -d "$APP_PATH" ]; then
         log "  📦 应用包: $APP_PATH"
         log "  📏 大小: $(du -sh "$APP_PATH" | cut -f1)"
         log "  🚀 状态: 已启动"
+    else
+        warning "应用包未找到，可能构建失败"
     fi
-    
+
     log ""
     log "下次启动方式:"
-    log "  快速启动: ./launch_integrated_simple.sh"
+    log "  快速启动: ./launch_integrated.sh"
     log "  完整重建: ./scripts/all_in_one_integrated.sh"
     log ""
     log "应用特点:"

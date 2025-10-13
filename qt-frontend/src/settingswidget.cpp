@@ -451,23 +451,27 @@ void SettingsWidget::showStatus(const QString &message, bool isError) {
   QString cleanMessage = message;
   cleanMessage = cleanMessage.remove("✅").remove("❌").remove("ℹ️").trimmed();
 
-  // 使用div确保每条消息都换行显示
+  // 使用div确保每条消息都换行显示，并添加明确的换行
   QString htmlMessage =
       QString("<div style='margin: 4px 0; padding: 4px; line-height: 1.5; "
-              "border-left: 3px solid %1; padding-left: 8px;'>"
+              "border-left: 3px solid %1; padding-left: 8px; display: block;'>"
               "<span style='color: #666; font-size: 11px;'>[%2]</span> "
               "<span style='color: %3; font-weight: bold; font-size: "
               "15px;'>%4</span> "
               "<span style='font-size: 13px; margin-left: 5px;'>%5</span>"
-              "</div>")
+              "</div><br>")
           .arg(color, timestamp, color, icon, cleanMessage.toHtmlEscaped());
 
-  m_statusText->insertHtml(htmlMessage);
-
-  // 滚动到底部
+  // 移动到文档末尾并插入HTML
   QTextCursor cursor = m_statusText->textCursor();
   cursor.movePosition(QTextCursor::End);
   m_statusText->setTextCursor(cursor);
+  m_statusText->insertHtml(htmlMessage);
+
+  // 确保滚动到底部
+  cursor.movePosition(QTextCursor::End);
+  m_statusText->setTextCursor(cursor);
+  m_statusText->ensureCursorVisible();
 }
 
 void SettingsWidget::clearStatus() { m_statusText->clear(); }

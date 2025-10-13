@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = /Library/Developer/CommandLineTools/usr/bin/clang
 CXX           = /Library/Developer/CommandLineTools/usr/bin/clang++
-DEFINES       = -DQT_NO_DEBUG_OUTPUT -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DAPP_VERSION=\"1.0.0\" -DQT_NO_DEBUG_OUTPUT -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -stdlib=libc++ -stdlib=libc++ -Wall -Wextra -O2 -O2 -std=gnu++1z $(EXPORT_ARCH_ARGS) -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -mmacosx-version-min=10.13 -Wall -Wextra -fPIC $(DEFINES)
 INCPATH       = -I../../qt-frontend -I. -I../src -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtWidgets.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtGui.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtNetwork.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/lib/QtCore.framework/Headers -Ibuild_simple_integrated/release/moc -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/OpenGL.framework/Headers -I/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/AGL.framework/Headers -I/opt/homebrew/Cellar/qt@5/5.15.17/mkspecs/macx-clang -F/opt/homebrew/Cellar/qt@5/5.15.17/lib

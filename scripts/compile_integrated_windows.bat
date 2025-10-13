@@ -49,12 +49,28 @@ REM 更新依赖
 echo 更新Go依赖...
 go mod tidy
 
-REM 编译Windows版本
-echo 编译Windows后端...
+REM 获取版本信息
+set /p VERSION=<VERSION
+if "%VERSION%"=="" set VERSION=dev
+
+REM 获取构建时间
+for /f "tokens=1-4 delims=/ " %%a in ('date /t') do set BUILD_DATE=%%a-%%b-%%c
+for /f "tokens=1-2 delims=: " %%a in ('time /t') do set BUILD_TIME=%%a:%%b
+set BUILD_TIME_FULL=%BUILD_DATE% %BUILD_TIME% UTC
+
+REM 获取Git提交
+for /f %%i in ('git rev-parse --short HEAD 2^>nul') do set GIT_COMMIT=%%i
+if "%GIT_COMMIT%"=="" set GIT_COMMIT=unknown
+
+REM 构建ldflags
+set LDFLAGS=-X "main.Version=%VERSION%" -X "main.BuildTime=%BUILD_TIME_FULL%" -X "main.GitCommit=%GIT_COMMIT%"
+
+REM 编译Windows版本（临时文件，用于内嵌到整合版应用中）
+echo 编译Windows后端 (版本: %VERSION%)...
 set CGO_ENABLED=1
 set GOOS=windows
 set GOARCH=amd64
-go build -buildvcs=false -o build\release\md2docx-server-windows.exe .\cmd\server
+go build -buildvcs=false -ldflags="%LDFLAGS%" -o build\release\md2docx-server-windows-temp.exe .\cmd\server
 if errorlevel 1 (
     echo ❌ Windows后端编译失败
     pause
@@ -62,12 +78,12 @@ if errorlevel 1 (
 )
 echo ✅ Windows后端编译完成
 
-REM 编译macOS版本（交叉编译）
-echo 编译macOS后端...
+REM 编译macOS版本（临时文件，用于内嵌到整合版应用中）
+echo 编译macOS后端 (版本: %VERSION%)...
 set CGO_ENABLED=1
 set GOOS=darwin
 set GOARCH=arm64
-go build -buildvcs=false -o build\release\md2docx-server-macos .\cmd\server
+go build -buildvcs=false -ldflags="%LDFLAGS%" -o build\release\md2docx-server-macos-temp .\cmd\server
 if errorlevel 1 (
     echo ❌ macOS后端编译失败
     pause
@@ -112,19 +128,19 @@ REM 验证编译结果
 echo.
 echo 验证编译结果...
 
-REM 检查后端文件
-if exist "build\release\md2docx-server-windows.exe" (
-    echo ✅ Windows后端: build\release\md2docx-server-windows.exe
+REM 检查临时后端文件
+if exist "build\release\md2docx-server-windows-temp.exe" (
+    echo ✅ Windows后端临时文件: build\release\md2docx-server-windows-temp.exe
 ) else (
-    echo ❌ Windows后端文件不存在
+    echo ❌ Windows后端临时文件不存在
     pause
     exit /b 1
 )
 
-if exist "build\release\md2docx-server-macos" (
-    echo ✅ macOS后端: build\release\md2docx-server-macos
+if exist "build\release\md2docx-server-macos-temp" (
+    echo ✅ macOS后端临时文件: build\release\md2docx-server-macos-temp
 ) else (
-    echo ❌ macOS后端文件不存在
+    echo ❌ macOS后端临时文件不存在
     pause
     exit /b 1
 )
@@ -133,16 +149,20 @@ REM 检查前端可执行文件
 if exist "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe" (
     echo ✅ Windows前端编译完成
 
-    REM 移动前端到build/release目录
-    echo 移动应用到build/release目录...
-    copy "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe" "build\release\" >nul
-    echo ✅ 应用已移动到 build\release\md2docx_simple_integrated.exe
+    REM 移动前端到build/release目录并重命名为带版本号的名称
+    echo 移动应用到build/release目录并重命名...
+    copy "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe" "build\release\md2docx_simple_integrated-v%VERSION%.exe" >nul
+    echo ✅ 应用已移动到 build\release\md2docx_simple_integrated-v%VERSION%.exe
 
-    REM 复制后端到build/release目录（如果还没有）
-    if not exist "build\release\md2docx-server-windows.exe" (
-        copy "build\release\md2docx-server-windows.exe" "build\release\" >nul
-    )
-    echo ✅ 后端已准备就绪
+    REM 内嵌后端到应用目录中（Windows版本需要在同一目录）
+    echo 内嵌后端到应用目录中...
+    copy "build\release\md2docx-server-windows-temp.exe" "build\release\md2docx-server-windows.exe" >nul
+    echo ✅ 内嵌后端完成
+
+    REM 删除临时后端文件
+    del "build\release\md2docx-server-windows-temp.exe" >nul 2>&1
+    del "build\release\md2docx-server-macos-temp" >nul 2>&1
+    echo ✅ 清理临时文件完成
 ) else (
     echo ❌ Windows前端可执行文件不存在
     pause
@@ -152,9 +172,7 @@ if exist "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.
 echo.
 echo ✅ === 编译完成 ===
 echo 编译结果:
-echo   Windows后端: build\release\md2docx-server-windows.exe
-echo   macOS后端: build\release\md2docx-server-macos
-echo   Windows整合版应用: build\release\md2docx_simple_integrated.exe
+echo   Windows整合版应用: build\release\md2docx_simple_integrated-v%VERSION%.exe
 echo.
-echo 下一步: 运行 scripts\build_integrated_windows.bat 构建最终应用
+echo 下一步: 运行 scripts\build_integrated_windows.bat 进行最终构建（如需要）
 pause

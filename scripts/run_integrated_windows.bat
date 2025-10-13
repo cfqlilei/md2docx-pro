@@ -5,8 +5,14 @@ REM 启动整合版应用
 echo === Markdown转Word工具 - 整合版运行 ===
 echo 启动整合版应用...
 
+REM 读取版本号
+set VERSION=1.0.0
+if exist "VERSION" (
+    set /p VERSION=<VERSION
+)
+
 REM 检查应用是否存在
-set APP_PATH=build\release\md2docx_simple_integrated.exe
+set APP_PATH=build\release\md2docx_simple_integrated-v%VERSION%.exe
 
 if not exist "%APP_PATH%" (
     echo ❌ 整合版应用不存在: %APP_PATH%

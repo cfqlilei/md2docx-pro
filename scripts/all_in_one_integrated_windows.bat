@@ -64,16 +64,24 @@ echo ✅ 整合版应用已成功构建并启动！
 echo.
 echo 构建结果:
 
-set APP_PATH=qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe
+REM 读取版本号
+set VERSION=1.0.0
+if exist "VERSION" (
+    set /p VERSION=<VERSION
+)
+
+set APP_PATH=build\release\md2docx_simple_integrated-v%VERSION%.exe
 if exist "%APP_PATH%" (
     echo   📦 应用程序: %APP_PATH%
     for %%f in ("%APP_PATH%") do echo   📏 大小: %%~zf 字节
     echo   🚀 状态: 已启动
+) else (
+    echo   ⚠️ 应用程序未找到，可能构建失败
 )
 
 echo.
 echo 下次启动方式:
-echo   快速启动: launch_integrated_windows.bat
+echo   快速启动: launch_integrated.bat
 echo   完整重建: scripts\all_in_one_integrated_windows.bat
 echo.
 echo 应用特点:

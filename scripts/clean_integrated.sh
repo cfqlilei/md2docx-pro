@@ -88,12 +88,15 @@ find qt-frontend -name "ui_*" -delete 2>/dev/null || true
 
 success "临时文件清理完成"
 
-# 清理启动脚本
-log "清理生成的启动脚本..."
+# 清理启动脚本和多余文件
+log "清理生成的启动脚本和多余文件..."
 LAUNCH_SCRIPTS=(
     "launch_macos.sh"
     "launch_windows.bat"
     "deploy_integrated.sh"
+    "BUILD_REPORT.md"
+    "launch_integrated_simple.sh"
+    "launch_integrated_windows.bat"
 )
 
 for script in "${LAUNCH_SCRIPTS[@]}"; do
@@ -102,6 +105,20 @@ for script in "${LAUNCH_SCRIPTS[@]}"; do
         success "删除 $script"
     fi
 done
+
+# 清理build/release目录中的多余文件
+log "清理build/release目录中的多余文件..."
+if [ -d "build/release" ]; then
+    # 删除不带版本号的后端程序
+    rm -f build/release/md2docx-server-macos
+    rm -f build/release/md2docx-server-windows.exe
+    # 删除不带版本号的整合版程序
+    rm -f build/release/md2docx_simple_integrated
+    rm -f build/release/md2docx_simple_integrated.app
+    # 删除Windows构建说明文件
+    rm -f build/release/BUILD_WINDOWS.md
+    success "清理多余文件完成"
+fi
 
 # 清理测试结果
 log "清理测试结果..."

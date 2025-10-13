@@ -6,8 +6,12 @@ CONFIG += c++17
 TARGET = md2docx_simple_integrated
 TEMPLATE = app
 
-# 版本信息
-VERSION = 1.0.0
+# 版本信息 - 从VERSION文件读取
+VERSION = $$cat($$PWD/../VERSION)
+isEmpty(VERSION): VERSION = dev
+
+# 定义版本宏
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 # 源文件 - 使用现有的文件，只修改main
 SOURCES += \
@@ -63,13 +67,16 @@ macx {
 
 win32 {
     # Windows配置
-    
+
     # 复制后端可执行文件到输出目录
-    QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/md2docx-server-windows.exe) $$shell_path($$DESTDIR/) 2>nul || echo.)
-    
+    QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/release/md2docx-server-windows.exe) $$shell_path($$DESTDIR/) 2>nul || echo.)
+
     # Windows特定编译选项
     QMAKE_CXXFLAGS += /utf-8
     DEFINES += WIN32_LEAN_AND_MEAN
+
+    # Windows GUI应用程序配置（不显示控制台）
+    CONFIG += windows
 }
 
 # 编译器警告

@@ -63,13 +63,27 @@ for /r qt-frontend %%f in (Makefile* *.o moc_* qrc_* ui_*) do (
 
 echo ✅ 临时文件清理完成
 
-REM 清理启动脚本
-echo 清理生成的启动脚本...
-for %%s in (launch_windows.bat deploy_integrated.bat) do (
+REM 清理启动脚本和多余文件
+echo 清理生成的启动脚本和多余文件...
+for %%s in (launch_windows.bat deploy_integrated.bat BUILD_REPORT.md launch_integrated_simple.sh launch_integrated_windows.bat) do (
     if exist "%%s" (
         del /q "%%s"
         echo ✅ 删除 %%s
     )
+)
+
+REM 清理build\release目录中的多余文件
+echo 清理build\release目录中的多余文件...
+if exist "build\release" (
+    REM 删除不带版本号的后端程序
+    del /q "build\release\md2docx-server-macos" 2>nul
+    del /q "build\release\md2docx-server-windows.exe" 2>nul
+    REM 删除不带版本号的整合版程序
+    del /q "build\release\md2docx_simple_integrated" 2>nul
+    del /q "build\release\md2docx_simple_integrated.exe" 2>nul
+    REM 删除Windows构建说明文件
+    del /q "build\release\BUILD_WINDOWS.md" 2>nul
+    echo ✅ 清理多余文件完成
 )
 
 REM 清理测试结果

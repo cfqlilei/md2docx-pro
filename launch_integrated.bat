@@ -2,7 +2,7 @@
 echo === Markdown转Word工具 - 整合版 ===
 echo 启动整合版应用...
 
-set APP_PATH=build\release\md2docx_simple_integrated.exe
+set APP_PATH=build\release\md2docx_simple_integrated-v1.0.0.exe
 
 if exist "%APP_PATH%" (
     echo ✅ 找到整合版应用: %APP_PATH%
@@ -11,15 +11,13 @@ if exist "%APP_PATH%" (
     echo ✅ 整合版应用已启动！
     echo.
     echo 特点：
-    echo   ✓ 单一程序，无需分别启动前后端
-    echo   ✓ 内嵌后端服务，自动启动
-    echo   ✓ 动态端口分配，避免冲突
-    echo   ✓ 完整的GUI界面
-    echo   ✓ 所有功能都已整合
+    echo   ✓ 单一程序，包含完整的后端服务器
+    echo   ✓ 可通过Web界面访问 (http://localhost:8080)
+    echo   ✓ 支持命令行参数
+    echo   ✓ 自动端口分配，避免冲突
 ) else (
     echo ❌ 错误: 整合版应用不存在
     echo 请先运行构建脚本:
-    echo   scripts\compile_integrated_windows.bat
-    echo   scripts\build_integrated_windows.bat
+    echo   scripts\all_in_one_integrated.sh
     pause
 )

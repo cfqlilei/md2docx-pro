@@ -5,11 +5,17 @@ REM 完整构建流程：清理 -> 编译 -> 打包
 echo === Markdown转Word工具 - 整合版构建 ===
 echo 开始整合版构建流程...
 
+REM 读取版本号
+set VERSION=1.0.0
+if exist "VERSION" (
+    set /p VERSION=<VERSION
+)
+
 REM 构建Windows版本
 echo 构建Windows整合版...
 
 REM 检查是否已编译
-if not exist "build\release\md2docx_simple_integrated.exe" (
+if not exist "build\release\md2docx_simple_integrated-v%VERSION%.exe" (
     echo ❌ 未找到编译结果，请先运行编译脚本
     echo 运行: scripts\compile_integrated_windows.bat
     pause
@@ -19,7 +25,7 @@ if not exist "build\release\md2docx_simple_integrated.exe" (
 echo ✅ 发现已存在的构建，继续构建流程...
 
 REM 验证应用完整性
-if exist "build\release\md2docx_simple_integrated.exe" (
+if exist "build\release\md2docx_simple_integrated-v%VERSION%.exe" (
     echo ✅ 前端可执行文件存在
 ) else (
     echo ❌ 前端可执行文件不存在
@@ -44,7 +50,7 @@ echo @echo off > launch_integrated.bat
 echo echo === Markdown转Word工具 - 整合版 === >> launch_integrated.bat
 echo echo 启动整合版应用... >> launch_integrated.bat
 echo. >> launch_integrated.bat
-echo set APP_PATH=build\md2docx_simple_integrated.exe >> launch_integrated.bat
+echo set APP_PATH=build\release\md2docx_simple_integrated-v%VERSION%.exe >> launch_integrated.bat
 echo. >> launch_integrated.bat
 echo if exist "%%APP_PATH%%" ^( >> launch_integrated.bat
 echo     echo ✅ 找到整合版应用: %%APP_PATH%% >> launch_integrated.bat

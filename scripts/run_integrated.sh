@@ -38,7 +38,8 @@ log "项目目录: $PROJECT_ROOT"
 
 # 检查应用是否存在
 check_app_exists() {
-    APP_PATH="build/release/md2docx_simple_integrated.app"
+    VERSION=$(cat VERSION 2>/dev/null || echo "dev")
+    APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.app"
 
     if [ ! -d "$APP_PATH" ]; then
         error "整合版应用不存在: $APP_PATH"
@@ -55,7 +56,8 @@ check_app_exists() {
 
 # 检查应用完整性
 check_app_integrity() {
-    APP_PATH="build/release/md2docx_simple_integrated.app"
+    VERSION=$(cat VERSION 2>/dev/null || echo "dev")
+    APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.app"
 
     # 检查前端可执行文件
     if [ ! -f "$APP_PATH/Contents/MacOS/md2docx_simple_integrated" ]; then
@@ -87,7 +89,8 @@ check_app_integrity() {
 
 # 显示应用信息
 show_app_info() {
-    APP_PATH="build/release/md2docx_simple_integrated.app"
+    VERSION=$(cat VERSION 2>/dev/null || echo "dev")
+    APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.app"
 
     log "应用信息:"
     log "  📦 应用包大小: $(du -sh "$APP_PATH" | cut -f1)"
@@ -98,7 +101,8 @@ show_app_info() {
 
 # 启动应用
 launch_app() {
-    APP_PATH="build/release/md2docx_simple_integrated.app"
+    VERSION=$(cat VERSION 2>/dev/null || echo "dev")
+    APP_PATH="build/release/md2docx_simple_integrated-v${VERSION}.app"
 
     log "🚀 启动整合版应用..."
 
