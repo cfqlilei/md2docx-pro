@@ -42,8 +42,8 @@ else
 fi
 
 # 重新创建build目录结构
-mkdir -p build/release
-success "重新创建 build/release/ 目录"
+mkdir -p build/bin build/intermediate/go build/intermediate/qt
+success "重新创建 build/ 目录结构"
 
 # 清理Go模块缓存
 log "清理Go模块缓存..."
@@ -54,7 +54,7 @@ success "Go缓存清理完成"
 # 清理Qt构建文件
 log "清理Qt前端构建文件..."
 
-# 清理所有Qt构建目录
+# 清理所有Qt构建目录（这些目录现在由 qmake 在 build/intermediate/qt 中生成）
 BUILD_DIRS=(
     "qt-frontend/build_simple_integrated"
     "qt-frontend/build_md2docx_app"
@@ -70,6 +70,12 @@ for dir in "${BUILD_DIRS[@]}"; do
         success "删除 $dir/ 目录"
     fi
 done
+
+# 清理 Qt 生成的 Makefile 和临时文件
+log "清理 Qt 生成的临时文件..."
+find qt-frontend -maxdepth 1 -name "Makefile*" -delete 2>/dev/null || true
+find qt-frontend -maxdepth 1 -name ".qmake.stash" -delete 2>/dev/null || true
+success "Qt 临时文件清理完成"
 
 # 清理临时文件
 log "清理临时文件..."
@@ -106,17 +112,11 @@ for script in "${LAUNCH_SCRIPTS[@]}"; do
     fi
 done
 
-# 清理build/release目录中的多余文件
-log "清理build/release目录中的多余文件..."
-if [ -d "build/release" ]; then
-    # 删除不带版本号的后端程序
-    rm -f build/release/md2docx-server-macos
-    rm -f build/release/md2docx-server-windows.exe
-    # 删除不带版本号的整合版程序
-    rm -f build/release/md2docx_simple_integrated
-    rm -f build/release/md2docx_simple_integrated.app
-    # 删除Windows构建说明文件
-    rm -f build/release/BUILD_WINDOWS.md
+# 清理 build/bin 目录中的多余文件（保留最终的二进制文件）
+log "清理 build/bin 目录中的多余文件..."
+if [ -d "build/bin" ]; then
+    # 删除 Windows 构建说明文件
+    rm -f build/bin/BUILD_WINDOWS.md
     success "清理多余文件完成"
 fi
 
@@ -142,7 +142,9 @@ success "删除配置文件"
 
 success "=== 清理完成 ==="
 log "已清理的内容:"
-log "  ✓ build/release/ 目录（统一构建输出）"
+log "  ✓ build/ 目录（统一构建输出）"
+log "    - build/bin/ 中的应用和二进制文件"
+log "    - build/intermediate/ 中的中间文件"
 log "  ✓ Go模块缓存"
 log "  ✓ Qt前端构建文件"
 log "  ✓ 临时文件和缓存"

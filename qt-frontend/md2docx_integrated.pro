@@ -42,33 +42,32 @@ RESOURCES += resources/resources.qrc
 # 包含路径
 INCLUDEPATH += src
 
-# 构建目录
+# 构建目录 - 统一使用 build 目录结构
 CONFIG(debug, debug|release) {
-    DESTDIR = build_integrated/debug
-    OBJECTS_DIR = build_integrated/debug/obj
-    MOC_DIR = build_integrated/debug/moc
-    RCC_DIR = build_integrated/debug/rcc
-    UI_DIR = build_integrated/debug/ui
+    DESTDIR = $$PWD/../build/bin
+    OBJECTS_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/obj
+    MOC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/moc
+    RCC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/rcc
+    UI_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/ui
 } else {
-    DESTDIR = build_integrated/release
-    OBJECTS_DIR = build_integrated/release/obj
-    MOC_DIR = build_integrated/release/moc
-    RCC_DIR = build_integrated/release/rcc
-    UI_DIR = build_integrated/release/ui
+    DESTDIR = $$PWD/../build/bin
+    OBJECTS_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/obj
+    MOC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/moc
+    RCC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/rcc
+    UI_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/ui
 }
-
 # 平台特定配置
 win32 {
     # Windows配置
     RC_ICONS = resources/icons/app.ico
-    
+
     # 复制后端可执行文件到输出目录
     CONFIG(debug, debug|release) {
-        QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/md2docx-server-windows.exe) $$shell_path($$DESTDIR/))
+        QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/bin/md2docx-server.exe) $$shell_path($$DESTDIR/))
     } else {
-        QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/md2docx-server-windows.exe) $$shell_path($$DESTDIR/))
+        QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/bin/md2docx-server.exe) $$shell_path($$DESTDIR/))
     }
-    
+
     # Windows特定编译选项
     QMAKE_CXXFLAGS += /utf-8
     DEFINES += WIN32_LEAN_AND_MEAN
@@ -77,14 +76,14 @@ win32 {
 macx {
     # macOS配置
     ICON = resources/icons/app.icns
-    
+
     # 应用程序包配置
     QMAKE_INFO_PLIST = resources/Info.plist
-    
+
     # 复制后端可执行文件到应用包
     QMAKE_POST_LINK += $$quote(mkdir -p $$DESTDIR/$${TARGET}.app/Contents/MacOS/)
-    QMAKE_POST_LINK += && $$quote(cp $$PWD/../build/md2docx-server-macos $$DESTDIR/$${TARGET}.app/Contents/MacOS/)
-    
+    QMAKE_POST_LINK += && $$quote(cp $$PWD/../build/bin/md2docx-server $$DESTDIR/$${TARGET}.app/Contents/MacOS/)
+
     # macOS特定编译选项
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
     QMAKE_CXXFLAGS += -stdlib=libc++
@@ -92,10 +91,10 @@ macx {
 
 unix:!macx {
     # Linux配置
-    
+
     # 复制后端可执行文件
-    QMAKE_POST_LINK += $$quote(cp $$PWD/../build/md2docx-server-linux $$DESTDIR/ 2>/dev/null || true)
-    
+    QMAKE_POST_LINK += $$quote(cp $$PWD/../build/bin/md2docx-server $$DESTDIR/ 2>/dev/null || true)
+
     # 安装配置
     target.path = /usr/local/bin
     INSTALLS += target

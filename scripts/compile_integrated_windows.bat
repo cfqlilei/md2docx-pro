@@ -43,7 +43,8 @@ echo.
 echo 编译Go后端...
 
 REM 创建构建目录
-if not exist "build\release" mkdir "build\release"
+if not exist "build\bin" mkdir "build\bin"
+if not exist "build\intermediate\go" mkdir "build\intermediate\go"
 
 REM 更新依赖
 echo 更新Go依赖...
@@ -65,12 +66,12 @@ if "%GIT_COMMIT%"=="" set GIT_COMMIT=unknown
 REM 构建ldflags
 set LDFLAGS=-X "main.Version=%VERSION%" -X "main.BuildTime=%BUILD_TIME_FULL%" -X "main.GitCommit=%GIT_COMMIT%"
 
-REM 编译Windows版本（临时文件，用于内嵌到整合版应用中）
+REM 编译Windows版本
 echo 编译Windows后端 (版本: %VERSION%)...
 set CGO_ENABLED=1
 set GOOS=windows
 set GOARCH=amd64
-go build -buildvcs=false -ldflags="%LDFLAGS%" -o build\release\md2docx-server-windows-temp.exe .\cmd\server
+go build -buildvcs=false -ldflags="%LDFLAGS%" -o build\bin\md2docx-server.exe .\cmd\server
 if errorlevel 1 (
     echo ❌ Windows后端编译失败
     pause
@@ -78,12 +79,12 @@ if errorlevel 1 (
 )
 echo ✅ Windows后端编译完成
 
-REM 编译macOS版本（临时文件，用于内嵌到整合版应用中）
+REM 编译macOS版本
 echo 编译macOS后端 (版本: %VERSION%)...
 set CGO_ENABLED=1
 set GOOS=darwin
 set GOARCH=arm64
-go build -buildvcs=false -ldflags="%LDFLAGS%" -o build\release\md2docx-server-macos-temp .\cmd\server
+go build -buildvcs=false -ldflags="%LDFLAGS%" -o build\bin\md2docx-server .\cmd\server
 if errorlevel 1 (
     echo ❌ macOS后端编译失败
     pause
@@ -95,18 +96,17 @@ REM 编译Qt前端
 echo.
 echo 编译Qt整合版前端...
 
-cd qt-frontend
+REM 创建中间文件目录
+if not exist "build\intermediate\qt\simple_integrated" mkdir "build\intermediate\qt\simple_integrated"
 
-REM 创建构建目录
-if not exist "build_simple_integrated" mkdir "build_simple_integrated"
-cd build_simple_integrated
+cd qt-frontend
 
 REM 生成Makefile
 echo 生成Makefile...
-qmake ..\md2docx_simple_integrated.pro
+qmake md2docx_simple_integrated.pro
 if errorlevel 1 (
     echo ❌ qmake失败
-    cd ..\..
+    cd ..
     pause
     exit /b 1
 )
@@ -116,53 +116,38 @@ echo 编译Qt应用...
 nmake
 if errorlevel 1 (
     echo ❌ Qt前端编译失败
-    cd ..\..
+    cd ..
     pause
     exit /b 1
 )
 echo ✅ Qt前端编译完成
 
-cd ..\..
+cd ...
 
 REM 验证编译结果
 echo.
 echo 验证编译结果...
 
-REM 检查临时后端文件
-if exist "build\release\md2docx-server-windows-temp.exe" (
-    echo ✅ Windows后端临时文件: build\release\md2docx-server-windows-temp.exe
+REM 检查后端文件
+if exist "build\bin\md2docx-server.exe" (
+    echo ✅ Windows后端: build\bin\md2docx-server.exe
 ) else (
-    echo ❌ Windows后端临时文件不存在
+    echo ❌ Windows后端不存在
     pause
     exit /b 1
 )
 
-if exist "build\release\md2docx-server-macos-temp" (
-    echo ✅ macOS后端临时文件: build\release\md2docx-server-macos-temp
+if exist "build\bin\md2docx-server" (
+    echo ✅ macOS后端: build\bin\md2docx-server
 ) else (
-    echo ❌ macOS后端临时文件不存在
+    echo ❌ macOS后端不存在
     pause
     exit /b 1
 )
 
 REM 检查前端可执行文件
-if exist "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe" (
-    echo ✅ Windows前端编译完成
-
-    REM 移动前端到build/release目录并重命名为带版本号的名称
-    echo 移动应用到build/release目录并重命名...
-    copy "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.exe" "build\release\md2docx_simple_integrated-v%VERSION%.exe" >nul
-    echo ✅ 应用已移动到 build\release\md2docx_simple_integrated-v%VERSION%.exe
-
-    REM 内嵌后端到应用目录中（Windows版本需要在同一目录）
-    echo 内嵌后端到应用目录中...
-    copy "build\release\md2docx-server-windows-temp.exe" "build\release\md2docx-server-windows.exe" >nul
-    echo ✅ 内嵌后端完成
-
-    REM 删除临时后端文件
-    del "build\release\md2docx-server-windows-temp.exe" >nul 2>&1
-    del "build\release\md2docx-server-macos-temp" >nul 2>&1
-    echo ✅ 清理临时文件完成
+if exist "build\bin\md2docx_simple_integrated.exe" (
+    echo ✅ Windows前端编译完成: build\bin\md2docx_simple_integrated.exe
 ) else (
     echo ❌ Windows前端可执行文件不存在
     pause
@@ -172,7 +157,9 @@ if exist "qt-frontend\build_simple_integrated\release\md2docx_simple_integrated.
 echo.
 echo ✅ === 编译完成 ===
 echo 编译结果:
-echo   Windows整合版应用: build\release\md2docx_simple_integrated-v%VERSION%.exe
+echo   后端二进制: build\bin\md2docx-server.exe (Windows) 和 build\bin\md2docx-server (macOS)
+echo   前端应用: build\bin\md2docx_simple_integrated.exe (Windows)
+echo   中间文件: build\intermediate\qt\ 和 build\intermediate\go\
 echo.
 echo 下一步: 运行 scripts\build_integrated_windows.bat 进行最终构建（如需要）
 pause

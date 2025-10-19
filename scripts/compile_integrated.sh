@@ -67,14 +67,14 @@ check_environment() {
 # 编译Go后端
 compile_backend() {
     log "编译Go后端..."
-    
+
     # 创建构建目录
-    mkdir -p build/release
-    
+    mkdir -p build/bin build/intermediate/go
+
     # 更新依赖
     log "更新Go依赖..."
     go mod tidy
-    
+
     # 获取版本信息
     VERSION=$(cat VERSION 2>/dev/null || echo "dev")
     BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
@@ -83,21 +83,21 @@ compile_backend() {
     # 构建ldflags
     LDFLAGS="-X 'main.Version=${VERSION}' -X 'main.BuildTime=${BUILD_TIME}' -X 'main.GitCommit=${GIT_COMMIT}'"
 
-    # 编译macOS版本（临时文件，用于内嵌到整合版应用中）
+    # 编译macOS版本
     log "编译macOS后端 (版本: ${VERSION})..."
-    CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -buildvcs=false -ldflags="${LDFLAGS}" -o build/release/md2docx-server-macos-temp ./cmd/server
+    CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -buildvcs=false -ldflags="${LDFLAGS}" -o build/bin/md2docx-server ./cmd/server
     if [ $? -eq 0 ]; then
-        success "macOS后端编译完成 ($(du -sh build/release/md2docx-server-macos-temp | cut -f1))"
+        success "macOS后端编译完成 ($(du -sh build/bin/md2docx-server | cut -f1))"
     else
         error "macOS后端编译失败"
         exit 1
     fi
 
-    # 编译Windows版本（临时文件，用于内嵌到整合版应用中）
+    # 编译Windows版本
     log "编译Windows后端 (版本: ${VERSION})..."
-    CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildvcs=false -ldflags="${LDFLAGS}" -o build/release/md2docx-server-windows-temp.exe ./cmd/server
+    CGO_ENABLED=1 GOOS=windows GOARCH=amd64 go build -buildvcs=false -ldflags="${LDFLAGS}" -o build/bin/md2docx-server.exe ./cmd/server
     if [ $? -eq 0 ]; then
-        success "Windows后端编译完成 ($(du -sh build/release/md2docx-server-windows-temp.exe | cut -f1))"
+        success "Windows后端编译完成 ($(du -sh build/bin/md2docx-server.exe | cut -f1))"
     else
         error "Windows后端编译失败"
         exit 1
@@ -110,13 +110,12 @@ compile_frontend() {
 
     cd qt-frontend
 
-    # 创建构建目录
-    mkdir -p build_simple_integrated
-    cd build_simple_integrated
+    # 创建中间文件目录
+    mkdir -p "$PROJECT_ROOT/build/intermediate/qt/simple_integrated"
 
     # 生成Makefile
     log "生成Makefile..."
-    qmake ../md2docx_simple_integrated.pro
+    qmake md2docx_simple_integrated.pro
     if [ $? -ne 0 ]; then
         error "qmake失败"
         cd "$PROJECT_ROOT"
@@ -129,17 +128,14 @@ compile_frontend() {
     if [ $? -eq 0 ]; then
         success "Qt前端编译完成"
 
-        # 获取版本信息并重命名应用
+        # 获取版本信息
         VERSION=$(cat "$PROJECT_ROOT/VERSION" 2>/dev/null || echo "dev")
 
-        # 将编译好的应用移动到build/release目录并重命名为带版本号的名称
-        log "移动应用到build/release目录并重命名..."
-        if [ -d "build_simple_integrated/release/md2docx_simple_integrated.app" ]; then
-            cp -r build_simple_integrated/release/md2docx_simple_integrated.app "$PROJECT_ROOT/build/release/md2docx_simple_integrated-v${VERSION}.app"
-            success "应用已移动到 build/release/md2docx_simple_integrated-v${VERSION}.app"
-        elif [ -f "build_simple_integrated/release/md2docx_simple_integrated" ]; then
-            cp build_simple_integrated/release/md2docx_simple_integrated "$PROJECT_ROOT/build/release/md2docx_simple_integrated-v${VERSION}"
-            success "应用已移动到 build/release/md2docx_simple_integrated-v${VERSION}"
+        # 检查编译好的应用文件
+        if [ -d "$PROJECT_ROOT/build/bin/md2docx_simple_integrated.app" ]; then
+            success "应用已编译到 build/bin/md2docx_simple_integrated.app"
+        elif [ -f "$PROJECT_ROOT/build/bin/md2docx_simple_integrated" ]; then
+            success "应用已编译到 build/bin/md2docx_simple_integrated"
         else
             warning "未找到编译好的应用文件"
         fi
@@ -158,42 +154,26 @@ verify_build() {
 
     VERSION=$(cat VERSION 2>/dev/null || echo "dev")
 
-    # 检查临时后端文件
-    if [ -f "build/release/md2docx-server-macos-temp" ]; then
-        success "macOS后端临时文件: build/release/md2docx-server-macos-temp ($(du -sh build/release/md2docx-server-macos-temp | cut -f1))"
+    # 检查后端文件
+    if [ -f "build/bin/md2docx-server" ]; then
+        success "macOS后端: build/bin/md2docx-server ($(du -sh build/bin/md2docx-server | cut -f1))"
     else
-        error "macOS后端临时文件不存在"
+        error "macOS后端不存在"
         exit 1
     fi
 
-    if [ -f "build/release/md2docx-server-windows-temp.exe" ]; then
-        success "Windows后端临时文件: build/release/md2docx-server-windows-temp.exe ($(du -sh build/release/md2docx-server-windows-temp.exe | cut -f1))"
+    if [ -f "build/bin/md2docx-server.exe" ]; then
+        success "Windows后端: build/bin/md2docx-server.exe ($(du -sh build/bin/md2docx-server.exe | cut -f1))"
     else
-        error "Windows后端临时文件不存在"
+        error "Windows后端不存在"
         exit 1
     fi
 
     # 检查前端应用包
-    if [ -d "build/release/md2docx_simple_integrated-v${VERSION}.app" ]; then
-        success "macOS整合版应用: build/release/md2docx_simple_integrated-v${VERSION}.app ($(du -sh build/release/md2docx_simple_integrated-v${VERSION}.app | cut -f1))"
-
-        # 内嵌后端到应用包中
-        log "内嵌后端到应用包中..."
-        mkdir -p "build/release/md2docx_simple_integrated-v${VERSION}.app/Contents/MacOS/"
-        cp build/release/md2docx-server-macos-temp "build/release/md2docx_simple_integrated-v${VERSION}.app/Contents/MacOS/md2docx-server-macos"
-        chmod +x "build/release/md2docx_simple_integrated-v${VERSION}.app/Contents/MacOS/md2docx-server-macos"
-        success "内嵌后端完成"
-
-        # 删除macOS临时后端文件（Windows临时文件保留给构建步骤使用）
-        rm -f build/release/md2docx-server-macos-temp
-        success "清理macOS临时文件完成"
-
-    elif [ -f "build/release/md2docx_simple_integrated-v${VERSION}" ]; then
-        success "整合版可执行文件: build/release/md2docx_simple_integrated-v${VERSION} ($(du -sh build/release/md2docx_simple_integrated-v${VERSION} | cut -f1))"
-
-        # 删除macOS临时后端文件（Windows临时文件保留给构建步骤使用）
-        rm -f build/release/md2docx-server-macos-temp
-        success "清理macOS临时文件完成"
+    if [ -d "build/bin/md2docx_simple_integrated.app" ]; then
+        success "macOS整合版应用: build/bin/md2docx_simple_integrated.app ($(du -sh build/bin/md2docx_simple_integrated.app | cut -f1))"
+    elif [ -f "build/bin/md2docx_simple_integrated" ]; then
+        success "整合版可执行文件: build/bin/md2docx_simple_integrated ($(du -sh build/bin/md2docx_simple_integrated | cut -f1))"
     else
         error "整合版应用文件不存在"
         exit 1
@@ -212,7 +192,9 @@ main() {
     VERSION=$(cat VERSION 2>/dev/null || echo "dev")
     success "=== 编译完成 ==="
     log "编译结果:"
-    log "  macOS整合版应用: build/release/md2docx_simple_integrated-v${VERSION}.app"
+    log "  后端二进制: build/bin/md2docx-server (macOS) 和 build/bin/md2docx-server.exe (Windows)"
+    log "  前端应用: build/bin/md2docx_simple_integrated.app (macOS) 或 build/bin/md2docx_simple_integrated (其他平台)"
+    log "  中间文件: build/intermediate/qt/ 和 build/intermediate/go/"
     log ""
     log "下一步: 运行 ./scripts/build_integrated.sh 进行最终构建（如需要）"
 }

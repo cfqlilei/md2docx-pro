@@ -15,8 +15,10 @@ if exist "build" (
 )
 
 REM 重新创建build目录结构
-mkdir build\release
-echo ✅ 重新创建 build\release\ 目录
+mkdir build\bin
+mkdir build\intermediate\go
+mkdir build\intermediate\qt
+echo ✅ 重新创建 build\ 目录结构
 
 REM 清理Go模块缓存
 echo 清理Go模块缓存...
@@ -61,6 +63,9 @@ for /r qt-frontend %%f in (Makefile* *.o moc_* qrc_* ui_*) do (
     if exist "%%f" del /q "%%f" 2>nul
 )
 
+REM 清理 Qt 生成的 .qmake.stash 文件
+del /q "qt-frontend\.qmake.stash" 2>nul
+
 echo ✅ 临时文件清理完成
 
 REM 清理启动脚本和多余文件
@@ -72,17 +77,11 @@ for %%s in (launch_windows.bat deploy_integrated.bat BUILD_REPORT.md launch_inte
     )
 )
 
-REM 清理build\release目录中的多余文件
-echo 清理build\release目录中的多余文件...
-if exist "build\release" (
-    REM 删除不带版本号的后端程序
-    del /q "build\release\md2docx-server-macos" 2>nul
-    del /q "build\release\md2docx-server-windows.exe" 2>nul
-    REM 删除不带版本号的整合版程序
-    del /q "build\release\md2docx_simple_integrated" 2>nul
-    del /q "build\release\md2docx_simple_integrated.exe" 2>nul
+REM 清理build\bin目录中的多余文件（保留最终的二进制文件）
+echo 清理build\bin目录中的多余文件...
+if exist "build\bin" (
     REM 删除Windows构建说明文件
-    del /q "build\release\BUILD_WINDOWS.md" 2>nul
+    del /q "build\bin\BUILD_WINDOWS.md" 2>nul
     echo ✅ 清理多余文件完成
 )
 
@@ -104,7 +103,9 @@ if exist "dist" (
 echo.
 echo ✅ === 清理完成 ===
 echo 已清理的内容:
-echo   ✓ Go后端构建文件 (build\)
+echo   ✓ build\ 目录（统一构建输出）
+echo     - build\bin\ 中的应用和二进制文件
+echo     - build\intermediate\ 中的中间文件
 echo   ✓ Go模块缓存
 echo   ✓ Qt前端构建文件
 echo   ✓ 临时文件和缓存

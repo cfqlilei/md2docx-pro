@@ -37,29 +37,29 @@ HEADERS += \
 # 包含路径
 INCLUDEPATH += src
 
-# 构建目录
+# 构建目录 - 统一使用 build 目录结构
 CONFIG(debug, debug|release) {
-    DESTDIR = build_simple_integrated/debug
-    OBJECTS_DIR = build_simple_integrated/debug/obj
-    MOC_DIR = build_simple_integrated/debug/moc
-    RCC_DIR = build_simple_integrated/debug/rcc
-    UI_DIR = build_simple_integrated/debug/ui
+    DESTDIR = $$PWD/../build/bin
+    OBJECTS_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/obj
+    MOC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/moc
+    RCC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/rcc
+    UI_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/ui
 } else {
-    DESTDIR = build_simple_integrated/release
-    OBJECTS_DIR = build_simple_integrated/release/obj
-    MOC_DIR = build_simple_integrated/release/moc
-    RCC_DIR = build_simple_integrated/release/rcc
-    UI_DIR = build_simple_integrated/release/ui
+    DESTDIR = $$PWD/../build/bin
+    OBJECTS_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/obj
+    MOC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/moc
+    RCC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/rcc
+    UI_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/ui
 }
 
 # 平台特定配置
 macx {
     # macOS配置
-    
+
     # 复制后端可执行文件到应用包
     QMAKE_POST_LINK += $$quote(mkdir -p $$DESTDIR/$${TARGET}.app/Contents/MacOS/)
-    QMAKE_POST_LINK += && $$quote(cp $$PWD/../build/md2docx-server-macos $$DESTDIR/$${TARGET}.app/Contents/MacOS/ 2>/dev/null || true)
-    
+    QMAKE_POST_LINK += && $$quote(cp $$PWD/../build/bin/md2docx-server $$DESTDIR/$${TARGET}.app/Contents/MacOS/ 2>/dev/null || true)
+
     # macOS特定编译选项
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13
     QMAKE_CXXFLAGS += -stdlib=libc++
@@ -69,7 +69,7 @@ win32 {
     # Windows配置
 
     # 复制后端可执行文件到输出目录
-    QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/release/md2docx-server-windows.exe) $$shell_path($$DESTDIR/) 2>nul || echo.)
+    QMAKE_POST_LINK += $$quote(copy /Y $$shell_path($$PWD/../build/bin/md2docx-server.exe) $$shell_path($$DESTDIR/) 2>nul || echo.)
 
     # Windows特定编译选项
     QMAKE_CXXFLAGS += /utf-8

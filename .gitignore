@@ -1,5 +1,31 @@
-UI_IMPROVEMENTS_SUMMARY.md
-tests/results/**
-tests/results/sample21.docx
-UI_IMPROVEMENTS_SUMMARY.md
+# Build and Output Directories
+build/
+dist/
+
+# Test Artifacts
+tests/results/
+
+# Go Build Artifacts
+*.exe
 md2docx-server
+md2docx-server.exe
+*.test
+*.out
+
+# Qt Build Artifacts (redundant if using /build, but good for safety)
+qt-frontend/build*/
+qt-frontend/*.pro.user
+qt-frontend/Makefile*
+qt-frontend/.qmake.stash
+
+# Generated files
+launch_integrated.sh
+launch_integrated.bat
+config.json
+
+# IDE/System Files
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~

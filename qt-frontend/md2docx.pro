@@ -40,8 +40,20 @@ HEADERS += \
 # RESOURCES += \
 #     resources/resources.qrc
 
-# 输出目录
-DESTDIR = build
+# 输出目录 - 统一使用 build 目录结构
+CONFIG(debug, debug|release) {
+    DESTDIR = $$PWD/../build/bin
+    OBJECTS_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/obj
+    MOC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/moc
+    RCC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/rcc
+    UI_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/debug/ui
+} else {
+    DESTDIR = $$PWD/../build/bin
+    OBJECTS_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/obj
+    MOC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/moc
+    RCC_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/rcc
+    UI_DIR = $$PWD/../build/intermediate/qt/$${TARGET}/release/ui
+}
 
 # 平台特定配置
 win32 {
