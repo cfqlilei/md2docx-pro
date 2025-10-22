@@ -1,11 +1,16 @@
 #include "httpapi.h"
 
 #include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonParseError>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QStandardPaths>
 #include <QTimer>
 #include <QUrl>
 
@@ -15,6 +20,9 @@ HttpApi::HttpApi(QObject *parent)
       m_timeoutTimer(new QTimer(this)) {
   m_timeoutTimer->setSingleShot(true);
   m_timeoutTimer->setInterval(REQUEST_TIMEOUT);
+
+  // 尝试从配置文件读取服务器端口
+  loadServerPortFromConfig();
 }
 
 HttpApi::~HttpApi() {}
@@ -309,4 +317,63 @@ ConfigData HttpApi::parseConfigData(const QJsonObject &json) {
   config.serverPort = json.value("server_port").toInt(8080);
 
   return config;
+}
+
+void HttpApi::loadServerPortFromConfig() {
+  QString configPath = getConfigFilePath();
+
+  QFileInfo configFile(configPath);
+  if (!configFile.exists()) {
+    qDebug() << "配置文件不存在，使用默认端口:" << configPath;
+    return;
+  }
+
+  // 读取配置文件
+  QFile file(configPath);
+  if (!file.open(QIODevice::ReadOnly)) {
+    qDebug() << "无法读取配置文件:" << configPath;
+    return;
+  }
+
+  QByteArray data = file.readAll();
+  file.close();
+
+  // 解析JSON
+  QJsonParseError error;
+  QJsonDocument doc = QJsonDocument::fromJson(data, &error);
+  if (error.error != QJsonParseError::NoError) {
+    qDebug() << "配置文件JSON解析失败:" << error.errorString();
+    return;
+  }
+
+  QJsonObject config = doc.object();
+  if (config.contains("server_port")) {
+    int port = config["server_port"].toInt();
+    if (port > 0 && port <= 65535) {
+      m_serverUrl = QString("http://localhost:%1").arg(port);
+      qDebug() << "从配置文件读取服务器端口:" << port;
+    }
+  }
+}
+
+QString HttpApi::getConfigFilePath() {
+  // 首先尝试用户主目录下的配置文件
+  QString homeDir =
+      QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+  if (!homeDir.isEmpty()) {
+    QString configPath = QDir(homeDir).filePath(".md2docx/config.json");
+    if (QFileInfo(configPath).exists()) {
+      return configPath;
+    }
+  }
+
+  // 然后尝试应用程序目录
+  QString appDir = QDir::currentPath();
+  QString configPath = QDir(appDir).filePath("config.json");
+  if (QFileInfo(configPath).exists()) {
+    return configPath;
+  }
+
+  // 返回默认路径（用户主目录）
+  return QDir(homeDir).filePath(".md2docx/config.json");
 }

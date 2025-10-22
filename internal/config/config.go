@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 )
 
@@ -22,8 +23,25 @@ var DefaultConfig = &Config{
 	ServerPort:   8080,
 }
 
-// configFile 配置文件路径
-const configFile = "config.json"
+// getConfigFilePath 获取配置文件路径
+func getConfigFilePath() string {
+	// 首先尝试使用用户主目录下的应用程序配置目录
+	if usr, err := user.Current(); err == nil {
+		configDir := filepath.Join(usr.HomeDir, ".md2docx")
+		// 确保配置目录存在
+		if err := os.MkdirAll(configDir, 0755); err == nil {
+			return filepath.Join(configDir, "config.json")
+		}
+	}
+
+	// 如果无法获取用户目录，使用当前工作目录
+	if wd, err := os.Getwd(); err == nil {
+		return filepath.Join(wd, "config.json")
+	}
+
+	// 最后的备选方案
+	return "config.json"
+}
 
 // Load 加载配置
 func Load() (*Config, error) {
@@ -33,9 +51,11 @@ func Load() (*Config, error) {
 		ServerPort:   DefaultConfig.ServerPort,
 	}
 
+	configFilePath := getConfigFilePath()
+
 	// 如果配置文件存在，则加载
-	if _, err := os.Stat(configFile); err == nil {
-		data, err := os.ReadFile(configFile)
+	if _, err := os.Stat(configFilePath); err == nil {
+		data, err := os.ReadFile(configFilePath)
 		if err != nil {
 			return nil, fmt.Errorf("读取配置文件失败: %v", err)
 		}
@@ -62,6 +82,10 @@ func Load() (*Config, error) {
 	if config.PandocPath == "" {
 		if pandocPath, err := findPandoc(); err == nil {
 			config.PandocPath = pandocPath
+			// 自动检测到路径后，保存配置
+			if err := config.Save(); err != nil {
+				fmt.Printf("警告: 无法保存自动检测的Pandoc路径: %v\n", err)
+			}
 		}
 	}
 
@@ -70,12 +94,14 @@ func Load() (*Config, error) {
 
 // Save 保存配置
 func (c *Config) Save() error {
+	configFilePath := getConfigFilePath()
+
 	data, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		return fmt.Errorf("序列化配置失败: %v", err)
 	}
 
-	if err := os.WriteFile(configFile, data, 0644); err != nil {
+	if err := os.WriteFile(configFilePath, data, 0644); err != nil {
 		return fmt.Errorf("保存配置文件失败: %v", err)
 	}
 
@@ -155,17 +181,16 @@ func (c *Config) Update(pandocPath, templateFile string) error {
 	if pandocPath != "" {
 		c.PandocPath = pandocPath
 	}
-	if templateFile != "" {
-		c.TemplateFile = templateFile
-	}
+	// 允许设置空模板文件（清空模板）
+	c.TemplateFile = templateFile
 
-	// 验证配置
+	// 验证Pandoc配置（必须有效）
 	if err := c.ValidatePandoc(); err != nil {
 		return err
 	}
-	if err := c.ValidateTemplate(); err != nil {
-		return err
-	}
+
+	// 模板文件验证：只有在非空时才验证，允许用户设置不存在的路径
+	// 实际使用时会在转换过程中再次验证
 
 	// 保存配置
 	return c.Save()

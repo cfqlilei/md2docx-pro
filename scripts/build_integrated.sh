@@ -43,34 +43,50 @@ build_macos() {
     # 获取版本信息
     VERSION=$(cat VERSION 2>/dev/null || echo "dev")
 
-    # 检查是否已编译
-    if [ -d "build/release/md2docx_simple_integrated-v${VERSION}.app" ]; then
-        log "发现已编译的整合版应用，验证完整性..."
-
-        # 验证应用包完整性
-        if [ -f "build/release/md2docx_simple_integrated-v${VERSION}.app/Contents/MacOS/md2docx_simple_integrated" ]; then
-            success "前端可执行文件存在"
-        else
-            error "前端可执行文件不存在"
-            exit 1
-        fi
-
-        if [ -f "build/release/md2docx_simple_integrated-v${VERSION}.app/Contents/MacOS/md2docx-server-macos" ]; then
-            success "内嵌后端服务器存在"
-        else
-            error "内嵌后端服务器不存在，请重新运行 ./scripts/compile_integrated.sh"
-            exit 1
-        fi
-
-        # 设置执行权限
-        chmod +x "build/release/md2docx_simple_integrated-v${VERSION}.app/Contents/MacOS/md2docx_simple_integrated"
-        chmod +x "build/release/md2docx_simple_integrated-v${VERSION}.app/Contents/MacOS/md2docx-server-macos"
-
-        success "macOS整合版构建完成"
-    else
+    # 检查编译结果是否存在
+    if [ ! -d "build/bin/md2docx_simple_integrated.app" ]; then
         error "未找到编译结果，请先运行 ./scripts/compile_integrated.sh"
         exit 1
     fi
+
+    if [ ! -f "build/bin/md2docx-server" ]; then
+        error "未找到后端服务器，请先运行 ./scripts/compile_integrated.sh"
+        exit 1
+    fi
+
+    # 创建发布目录
+    mkdir -p build/release
+
+    # 复制应用包到发布目录并重命名
+    RELEASE_APP="build/release/md2docx_simple_integrated-v${VERSION}.app"
+
+    log "复制应用包到发布目录..."
+    cp -R "build/bin/md2docx_simple_integrated.app" "$RELEASE_APP"
+
+    # 将后端服务器复制到应用包内并重命名
+    log "集成后端服务器到应用包..."
+    cp "build/bin/md2docx-server" "$RELEASE_APP/Contents/MacOS/md2docx-server-macos"
+
+    # 设置执行权限
+    chmod +x "$RELEASE_APP/Contents/MacOS/md2docx_simple_integrated"
+    chmod +x "$RELEASE_APP/Contents/MacOS/md2docx-server-macos"
+
+    # 验证构建结果
+    if [ -f "$RELEASE_APP/Contents/MacOS/md2docx_simple_integrated" ]; then
+        success "前端可执行文件已集成"
+    else
+        error "前端可执行文件集成失败"
+        exit 1
+    fi
+
+    if [ -f "$RELEASE_APP/Contents/MacOS/md2docx-server-macos" ]; then
+        success "后端服务器已集成"
+    else
+        error "后端服务器集成失败"
+        exit 1
+    fi
+
+    success "macOS整合版构建完成: $RELEASE_APP"
 }
 
 # 构建Windows版本（创建Windows可执行文件）
@@ -81,12 +97,12 @@ build_windows() {
     VERSION=$(cat VERSION 2>/dev/null || echo "dev")
 
     # 检查Windows后端是否存在
-    if [ -f "build/release/md2docx-server-windows-temp.exe" ]; then
+    if [ -f "build/bin/md2docx-server.exe" ]; then
         # 创建Windows可执行文件（包含后端）
         log "创建Windows整合版可执行文件..."
 
         # 复制Windows后端作为主程序
-        cp "build/release/md2docx-server-windows-temp.exe" "build/release/md2docx_simple_integrated-v${VERSION}.exe"
+        cp "build/bin/md2docx-server.exe" "build/release/md2docx_simple_integrated-v${VERSION}.exe"
 
         success "Windows整合版应用已创建: build/release/md2docx_simple_integrated-v${VERSION}.exe"
         success "Windows版本包含完整的后端服务器，可以通过命令行或Web界面使用"
